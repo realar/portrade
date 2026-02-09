@@ -18,6 +18,7 @@ interface Product {
   };
   images?: string[];
   timeLeft?: string;
+  isLastChance?: boolean;
 }
 
 interface PageProps {
@@ -38,13 +39,22 @@ export default async function CatalogPage({ params }: PageProps) {
   // Get products from the new single source
   let products = catalog.products as Product[];
   
-  // Enrich products with group buy info if needed (optional for catalog view but good for consistency)
+  // Helper: Check if group buy is in last 10% (by quantity remaining)
+  const isLastChance = (gb: { currentQuantity: number; targetQuantity: number }): boolean => {
+      const remaining = gb.targetQuantity - gb.currentQuantity;
+      const percentRemaining = remaining / gb.targetQuantity;
+      return percentRemaining < 0.1 && percentRemaining > 0;
+  };
+
+  // Enrich products with group buy info (only for open group buys)
   products = products.map(p => {
-      const gb = catalog.groupBuys.find((g) => g.productId === p.id);
+      const gb = catalog.groupBuys.find((g) => g.productId === p.id && g.status === 'open');
       if (gb) {
+          const remaining = gb.targetQuantity - gb.currentQuantity;
           return {
               ...p,
-              timeLeft: gb.deadline,
+              timeLeft: remaining > 0 ? `${remaining} шт` : undefined,
+              isLastChance: isLastChance(gb),
               groupBuy: {
                   participants: Math.floor(gb.currentQuantity / 10 + 50),
                   target: gb.targetQuantity,
@@ -53,7 +63,8 @@ export default async function CatalogPage({ params }: PageProps) {
               }
           };
       }
-      return p;
+      // Explicitly set timeLeft to undefined for products without open group buys
+      return { ...p, timeLeft: undefined, isLastChance: false };
   });
 
   if (categoryId) {
@@ -113,6 +124,7 @@ export default async function CatalogPage({ params }: PageProps) {
                      timeLeft={product.timeLeft}
                      image={product.images?.[0]}
                      images={product.images}
+                     isLastChance={product.isLastChance}
                    />
                  ))}
               </div>

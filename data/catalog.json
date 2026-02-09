@@ -279,10 +279,19 @@
       "id": 1,
       "productId": 101,
       "targetQuantity": 100,
-      "currentQuantity": 11,
+      "currentQuantity": 91,
       "status": "open",
       "deadline": "2026-03-11",
       "price": 1250
+    },
+    {
+      "id": 2,
+      "productId": 102,
+      "targetQuantity": 100,
+      "currentQuantity": 10,
+      "status": "open",
+      "deadline": "2026-03-11",
+      "price": 2300
     }
   ],
   "orders": [
@@ -293,6 +302,33 @@
       "quantity": 11,
       "total": 13750,
       "date": "2026-02-09T08:09:42.199Z",
+      "status": "active"
+    },
+    {
+      "id": "ord-1770627815609",
+      "groupBuyId": 1,
+      "userId": "u1",
+      "quantity": 79,
+      "total": 98750,
+      "date": "2026-02-09T09:03:35.609Z",
+      "status": "active"
+    },
+    {
+      "id": "ord-1770627827276",
+      "groupBuyId": 1,
+      "userId": "u1",
+      "quantity": 1,
+      "total": 1250,
+      "date": "2026-02-09T09:03:47.276Z",
+      "status": "active"
+    },
+    {
+      "id": "ord-1770628105809",
+      "groupBuyId": 2,
+      "userId": "u1",
+      "quantity": 10,
+      "total": 23000,
+      "date": "2026-02-09T09:08:25.809Z",
       "status": "active"
     }
   ]

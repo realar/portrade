@@ -1,8 +1,5 @@
 import Header from '@/components/Header';
-import Hero from '@/components/Hero';
-import CategoryGrid from '@/components/CategoryGrid';
 import ProductSection from '@/components/ProductSection';
-import BannerCarousel from '@/components/BannerCarousel';
 import { readCatalog } from '@/app/actions/catalog';
 import { Product } from '@/context/MockDataContext';
 
@@ -12,18 +9,17 @@ interface EnrichedProduct extends Product {
         target: number;
         timeLeft: string;
         progress: number;
-    };
-    isLastChance?: boolean;
+    }
 }
 
-export default async function Home() {
+export default async function PopularPage() {
   const catalog = await readCatalog();
   
   // Helper: Check if group buy is in last 10% (by quantity remaining)
   const isLastChance = (gb: { currentQuantity: number; targetQuantity: number }): boolean => {
       const remaining = gb.targetQuantity - gb.currentQuantity;
       const percentRemaining = remaining / gb.targetQuantity;
-      return percentRemaining < 0.1 && percentRemaining > 0; // Less than 10% remaining, but not complete
+      return percentRemaining < 0.1 && percentRemaining > 0;
   };
 
   // Combine product data with group buy info for display
@@ -48,7 +44,7 @@ export default async function Home() {
       });
   };
 
-  // Auto-detect last chance products (open group buys with <10% quantity left)
+  // Get last chance products
   const lastChanceRaw = catalog.products.filter((p) => {
       const gb = catalog.groupBuys.find((g) => g.productId === p.id && g.status === 'open');
       return gb && isLastChance(gb);
@@ -59,29 +55,20 @@ export default async function Home() {
       !lastChanceRaw.some(lc => lc.id === p.id)
   );
 
-  const popularProducts = enrichProducts(popularRaw).slice(0, 4); // Show only 4 items (one row)
-  const lastChanceProducts = enrichProducts(lastChanceRaw);
+  const popularProducts = enrichProducts(popularRaw);
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
       <main className="max-w-[1400px] mx-auto pb-20">
-        {/* Promo Banners Section */}
         <div className="px-6 md:px-12 py-8">
-           <BannerCarousel banners={catalog.banners} />
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Популярные товары</h1>
+          <p className="text-gray-600">Все товары из нашего каталога</p>
         </div>
-        <CategoryGrid />
-
+        
         <ProductSection 
-          title="Последний шанс" 
-          products={lastChanceProducts} 
-          icon="fire" 
-          showAllLink="/last-chance"
-        />
-        <ProductSection 
-          title="Популярные товары" 
-          products={popularProducts}
-          showAllLink="/popular"
+          title="" 
+          products={popularProducts} 
         />
       </main>
     </div>

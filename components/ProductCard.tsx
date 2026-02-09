@@ -3,6 +3,7 @@
 import { useState, MouseEvent } from 'react';
 import Link from 'next/link';
 import Price from './Price';
+import { Flame } from 'lucide-react';
 
 interface ProductCardProps {
   id: number;
@@ -12,9 +13,10 @@ interface ProductCardProps {
   timeLeft?: string;
   image?: string;
   images?: string[];
+  isLastChance?: boolean;
 }
 
-export default function ProductCard({ id, category, name, price, timeLeft, image, images }: ProductCardProps) {
+export default function ProductCard({ id, category, name, price, timeLeft, image, images, isLastChance }: ProductCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   // Use images array if available, otherwise fallback to single image
@@ -68,7 +70,8 @@ export default function ProductCard({ id, category, name, price, timeLeft, image
          )}
 
          {timeLeft && (
-           <div className="absolute top-3 left-3 bg-white px-2 py-1 rounded-md text-xs font-medium text-gray-800 shadow-sm z-10">
+           <div className="absolute top-3 left-3 bg-white px-2 py-1 rounded-md text-xs font-medium text-gray-800 shadow-sm z-10 flex items-center gap-1">
+             {isLastChance && <Flame className="w-3 h-3 text-primary-600 fill-primary-600" />}
              Осталось: {timeLeft}
            </div>
          )}
