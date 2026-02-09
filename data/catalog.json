@@ -1,0 +1,299 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Электроника и гаджеты",
+      "image": "/images/category/1.webp"
+    },
+    {
+      "id": 2,
+      "name": "Товары для дома",
+      "image": "/images/category/2.webp"
+    },
+    {
+      "id": 3,
+      "name": "Детские товары",
+      "image": "/images/category/3.webp"
+    },
+    {
+      "id": 4,
+      "name": "Автотовары",
+      "image": "/images/category/4.webp"
+    },
+    {
+      "id": 5,
+      "name": "Зоотовары",
+      "image": "/images/category/5.webp"
+    },
+    {
+      "id": 6,
+      "name": "Спорт и отдых",
+      "image": "/images/category/6.webp"
+    }
+  ],
+  "banners": [
+    {
+      "id": 1,
+      "title": "Хит сезона 2024",
+      "subtitle": "Беспроводные наушники с шумоподавлением",
+      "buttonText": "Купить оптом",
+      "image": "/images/category/1.webp",
+      "backgroundColor": "bg-primary-600",
+      "circleColor": "bg-primary-500",
+      "link": "/product/101"
+    },
+    {
+      "id": 2,
+      "title": "Скидки до 40%",
+      "subtitle": "На товары для умного дома",
+      "buttonText": "Смотреть каталог",
+      "image": "/images/category/2.webp",
+      "backgroundColor": "bg-primary-600",
+      "circleColor": "bg-primary-500",
+      "link": "/catalog/2"
+    }
+  ],
+  "products": [
+    {
+      "id": 101,
+      "category": "Электроника и гаджеты",
+      "name": "Беспроводные наушники SoundPro X1",
+      "price": 1250,
+      "images": [
+        "/images/products/101.webp",
+        "/images/products/101_2.webp",
+        "/images/products/101_3.webp"
+      ],
+      "description": "Премиальные беспроводные наушники с активным шумоподавлением и поддержкой кодеков высокого разрешения. Идеальный выбор для оптовой закупки под реализацию на маркетплейсах. Поставляются в презентабельной упаковке.",
+      "specs": [
+        {
+          "name": "Bluetooth",
+          "value": "5.3"
+        },
+        {
+          "name": "Время работы",
+          "value": "до 30 ч"
+        },
+        {
+          "name": "Шумоподавление",
+          "value": "ANC 42dB"
+        },
+        {
+          "name": "Влагозащита",
+          "value": "IPX5"
+        }
+      ],
+      "tags": [
+        "popular"
+      ]
+    },
+    {
+      "id": 102,
+      "category": "Электроника и гаджеты",
+      "name": "Смарт-часы ActiveLife 7",
+      "price": 2300,
+      "images": [
+        "/images/products/102.webp",
+        "/images/products/102_2.webp"
+      ],
+      "description": "Многофункциональные смарт-часы с безрамочным экраном 1.9 дюйма. Измерение пульса, кислорода в крови, давления. Более 100 спортивных режимов. Русская локализация из коробки.",
+      "specs": [
+        {
+          "name": "Экран",
+          "value": "1.9\" IPS"
+        },
+        {
+          "name": "Корпус",
+          "value": "Алюминий"
+        },
+        {
+          "name": "Приложение",
+          "value": "WearFit Pro"
+        }
+      ],
+      "tags": [
+        "popular"
+      ]
+    },
+    {
+      "id": 103,
+      "category": "Товары для дома",
+      "name": "Робот-пылесос CleanMaster 3000",
+      "price": 8500,
+      "images": [
+        "/images/products/103.webp",
+        "/images/products/103_2.webp"
+      ],
+      "description": "Бюджетный робот-пылесос с функцией влажной уборки. Построение карты помещения (гироскоп). Управление со смартфона и через Алису.",
+      "specs": [
+        {
+          "name": "Мощность",
+          "value": "2500 Па"
+        },
+        {
+          "name": "Аккумулятор",
+          "value": "2600 мАч"
+        },
+        {
+          "name": "Уборка",
+          "value": "Сухая и влажная"
+        }
+      ],
+      "tags": [
+        "popular"
+      ]
+    },
+    {
+      "id": 104,
+      "category": "Автотовары",
+      "name": "Автомобильный компрессор TurboPump",
+      "price": 950,
+      "images": [
+        "/images/products/104.webp",
+        "/images/products/104_2.webp",
+        "/images/products/104_3.webp"
+      ],
+      "description": "Компактный металлический поршневой компрессор. Накачивает колесо R16 за 3 минуты. В комплекте сумка и набор насадок.",
+      "specs": [
+        {
+          "name": "Производительность",
+          "value": "35 л/мин"
+        },
+        {
+          "name": "Питание",
+          "value": "12В (прикуриватель)"
+        },
+        {
+          "name": "Манометр",
+          "value": "Аналоговый"
+        }
+      ],
+      "tags": [
+        "popular"
+      ]
+    },
+    {
+      "id": 201,
+      "category": "Детские товары",
+      "name": "Конструктор 'Космическая станция'",
+      "price": 1800,
+      "images": [
+        "/images/products/105_2.webp",
+        "/images/products/105.webp"
+      ],
+      "timeLeft": "25 шт.",
+      "description": "Большой набор на 800+ деталей. Совместим с известными брендами. Качественный ABS пластик без запаха.",
+      "specs": [
+        {
+          "name": "Деталей",
+          "value": "842 шт."
+        },
+        {
+          "name": "Возраст",
+          "value": "6+"
+        }
+      ],
+      "tags": [
+        "last_chance"
+      ]
+    },
+    {
+      "id": 202,
+      "category": "Спорт и отдых",
+      "name": "Набор фитнес-резинок (5 шт)",
+      "price": 250,
+      "images": [
+        "/images/products/106.webp",
+        "/images/products/106_2.webp",
+        "/images/products/106_3.webp"
+      ],
+      "timeLeft": "120 шт.",
+      "description": "Популярный товар для домашнего фитнеса. 5 уровней нагрузки. Мешочек для хранения в комплекте.",
+      "specs": [
+        {
+          "name": "Материал",
+          "value": "Латекс"
+        },
+        {
+          "name": "Нагрузка",
+          "value": "5-25 кг"
+        }
+      ],
+      "tags": [
+        "last_chance"
+      ]
+    },
+    {
+      "id": 203,
+      "category": "Зоотовары",
+      "name": "Автопоилка для кошек и собак",
+      "price": 1100,
+      "images": [
+        "/images/products/107.webp",
+        "/images/products/107_2.webp"
+      ],
+      "timeLeft": "30 шт.",
+      "description": "Фонтанчик для пить с фильтрацией воды. Бесшумный насос. Объем 2 литра.",
+      "specs": [
+        {
+          "name": "Объем",
+          "value": "2 л"
+        },
+        {
+          "name": "Питание",
+          "value": "USB"
+        }
+      ],
+      "tags": [
+        "last_chance"
+      ]
+    },
+    {
+      "id": 204,
+      "category": "Товары для дома",
+      "name": "Умная LED лента (5 метров)",
+      "price": 450,
+      "images": [
+        "/images/products/108.webp",
+        "/images/products/108_2.webp"
+      ],
+      "timeLeft": "15 шт.",
+      "description": "RGB лента с управлением через приложение и пульт. Клеевой слой 3M. Работает от USB.",
+      "specs": [
+        {
+          "name": "Длина",
+          "value": "5 м"
+        },
+        {
+          "name": "Управление",
+          "value": "Bluetooth + Пульт"
+        }
+      ],
+      "tags": [
+        "last_chance"
+      ]
+    }
+  ],
+  "groupBuys": [
+    {
+      "id": 1,
+      "productId": 101,
+      "targetQuantity": 100,
+      "currentQuantity": 11,
+      "status": "open",
+      "deadline": "2026-03-11",
+      "price": 1250
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord-1770624582199",
+      "groupBuyId": 1,
+      "userId": "u1",
+      "quantity": 11,
+      "total": 13750,
+      "date": "2026-02-09T08:09:42.199Z",
+      "status": "active"
+    }
+  ]
+}
