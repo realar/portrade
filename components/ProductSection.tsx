@@ -20,7 +20,7 @@ interface ProductSectionProps {
 
 export default function ProductSection({ title, products, icon, showAllLink }: ProductSectionProps) {
   return (
-    <section className="w-full px-6 md:px-12 py-8">
+    <section className="w-full md:px-12 py-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
           {icon === 'fire' && <Flame className="w-5 h-5 text-primary-600 fill-primary-600" />}
