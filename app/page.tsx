@@ -16,6 +16,9 @@ interface EnrichedProduct extends Product {
     isLastChance?: boolean;
 }
 
+// Disable caching to show real-time group buy updates
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const catalog = await readCatalog();
   

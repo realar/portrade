@@ -155,17 +155,17 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <main className="max-w-[1400px] mx-auto pb-20 pt-8 px-6 md:px-12">
+      <main className="max-w-[1400px] mx-auto pb-20 pt-8">
         
         <button 
           onClick={() => router.back()} 
-          className="group inline-flex items-center text-gray-500 hover:text-gray-900 transition-colors mb-8"
+          className="group inline-flex items-center text-gray-500 hover:text-gray-900 transition-colors mb-8 px-6 md:px-12"
         >
           <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Назад</span>
         </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 px-6 md:px-12">
           <ProductGallery images={displayProduct.images} />
           <ProductInfo 
             category={displayProduct.category}

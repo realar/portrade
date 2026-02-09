@@ -25,6 +25,9 @@ interface PageProps {
   params: Promise<{ slug?: string[] }>;
 }
 
+// Disable caching to show real-time group buy updates
+export const dynamic = 'force-dynamic';
+
 export default async function CatalogPage({ params }: PageProps) {
   const { slug } = await params;
   const categoryId = slug && slug.length > 0 ? Number(slug[0]) : null;
