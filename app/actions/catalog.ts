@@ -124,9 +124,12 @@ export async function readCatalog(): Promise<CatalogData> {
 
   // Seed DB if we read from file and DB was accessible but empty
   // OR if the DB data seems significantly incomplete (e.g. no products) and we have file data
+  // OR if data seems corrupt (e.g. group buys without productIds)
   const dbDataSeemsEmpty = !rawData?.products || rawData.products.length === 0;
+  const dbDataSeemsCorrupt = rawData?.groupBuys?.some(gb => !gb.productIds) || false;
 
-  if ((dbWasEmpty || dbDataSeemsEmpty) && pool) {
+  if ((dbWasEmpty || dbDataSeemsEmpty || dbDataSeemsCorrupt) && pool) {
+      if (dbDataSeemsCorrupt) console.log("Database data appears corrupt (missing fields). Re-seeding...");
      try {
        // If we are here, we might need to reload from file if we haven't already
        if (!dbWasEmpty) {

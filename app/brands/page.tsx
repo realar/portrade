@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function BrandsPage() {
   const catalog = await readCatalog();
-  const brands = Array.from(new Set(catalog.factories.flatMap(f => f.brands))).sort();
+  const brands = Array.from(new Set(catalog.factories.flatMap(f => f.brands || []))).sort();
 
   return (
     <div className="min-h-screen bg-gray-50/50">

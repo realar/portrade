@@ -20,14 +20,14 @@ export default function ProductPage() {
   const product = products.find(p => p.id === id);
   // Find active group buy specifically for this product
   const gb = product 
-    ? groupBuys.find(g => g.productIds.includes(product.id) && g.status === 'open')
+    ? groupBuys.find(g => g.productIds?.includes(product.id) && g.status === 'open')
     : undefined;
 
   const factory = factories.find(f => f.id === product?.factoryId);
   const supplier = factory ? suppliers.find(s => s.id === factory.supplierId) : null;
 
   const suggestedProducts = gb 
-    ? products.filter(p => gb.productIds.includes(p.id) && p.id !== id)
+    ? products.filter(p => gb.productIds?.includes(p.id) && p.id !== id)
     : products.filter(p => p.category === product?.category && p.id !== id).slice(0, 4);
 
   // Get other ACTIVE GROUP BUYS for sidebar (from same supplier)
@@ -46,7 +46,7 @@ export default function ProductPage() {
         .slice(0, 4)
         .map(g => {
            // Get main product of the group buy
-           const mainProduct = products.find(p => p.id === g.productIds[0]);
+           const mainProduct = products.find(p => p.id === g.productIds?.[0]);
            return mainProduct ? {
               id: mainProduct.id,
               name: g.title || mainProduct.name, // Use GB title if available
@@ -116,7 +116,7 @@ export default function ProductPage() {
   };
 
   const formattedSuggested = suggestedProducts.map(p => {
-    const pGb = groupBuys.find(g => g.productIds.includes(p.id) && g.status === 'open');
+    const pGb = groupBuys.find(g => g.productIds?.includes(p.id) && g.status === 'open');
     return {
       ...p,
       groupBuy: pGb ? {

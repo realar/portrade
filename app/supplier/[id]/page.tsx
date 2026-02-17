@@ -51,7 +51,7 @@ export default function SupplierPage() {
   const supplierProducts = products
     .filter(p => factoryIds.includes(p.factoryId))
     .map(product => {
-       const activeGroupBuy = groupBuys.find(gb => gb.productIds.includes(product.id) && gb.status === 'open');
+       const activeGroupBuy = groupBuys.find(gb => gb.productIds?.includes(product.id) && gb.status === 'open');
        
        if (activeGroupBuy) {
            const remaining = activeGroupBuy.targetQuantity - activeGroupBuy.currentQuantity;

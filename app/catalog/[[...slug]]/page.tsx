@@ -33,7 +33,7 @@ export default async function CatalogPage({ params }: PageProps) {
 
   // Enrich products with group buy info
   const enrichedProducts = allProducts.map(p => {
-    const gb = catalog.groupBuys.find(g => g.productIds.includes(p.id) && g.status === 'open');
+    const gb = catalog.groupBuys.find(g => g.productIds?.includes(p.id) && g.status === 'open');
     if (gb) {
       const remaining = gb.targetQuantity - gb.currentQuantity;
       const progress = Math.round((gb.currentQuantity / gb.targetQuantity) * 100);
