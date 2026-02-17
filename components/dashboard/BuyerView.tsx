@@ -146,7 +146,7 @@ export default function BuyerView() {
                        <div className="flex-grow space-y-4">
                           <h4 className="text-sm font-medium text-gray-500 mb-3 uppercase tracking-wider">Состав заказа</h4>
                           <div className="space-y-3">
-                            {order.items.map((item) => {
+                            {(order.items || []).map((item) => {
                                const product = products.find(p => p.id === item.productId);
                                return (
                                  <div key={item.productId} className="flex items-center gap-4 group">

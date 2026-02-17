@@ -197,7 +197,7 @@ export default function GroupBuyManagementPage() {
                                               </div>
                                           </td>
                                           <td className="py-3 px-4 text-gray-600">
-                                            {order.items.map(item => {
+                                            {(order.items || []).map(item => {
                                               const p = products.find(prod => prod.id === item.productId);
                                               return <div key={item.productId} className="text-xs">{p?.name || `#${item.productId}`} × {item.quantity}</div>;
                                             })}
