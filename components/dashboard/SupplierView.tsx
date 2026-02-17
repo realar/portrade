@@ -69,7 +69,7 @@ export default function SupplierView() {
             return (
               <Link key={factory.id} href={`/factory/${factory.id}`} className="bg-white p-5 rounded-xl border border-gray-200 hover:border-primary-200 hover:shadow-sm transition-all">
                 <h3 className="font-semibold text-gray-900 mb-1">{factory.name}</h3>
-                <p className="text-xs text-gray-500 mb-3">Товаров: {factoryProducts.length} · Бренды: {factory.brands.join(', ')}</p>
+                <p className="text-xs text-gray-500 mb-3">Товаров: {factoryProducts.length} · Бренды: {(factory.brands || []).join(', ')}</p>
                 {activeGB && (
                   <div>
                     <div className="flex justify-between text-xs text-gray-500 mb-1">

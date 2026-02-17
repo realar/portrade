@@ -123,8 +123,9 @@ export default function BuyerView() {
                        </span>
                        <button 
                          onClick={() => {
-                           import('@/utils/invoiceGenerator').then(({ generateInvoicePDF }) => {
-                             const firstProduct = order.items[0] ? products.find(p => p.id === order.items[0].productId) : null;
+                            import('@/utils/invoiceGenerator').then(({ generateInvoicePDF }) => {
+                             const firstProduct = order.items?.[0] ? products.find(p => p.id === order.items[0].productId) : null;
+                             if (!firstProduct) return; // Guard against empty orders
                              const doc = generateInvoicePDF(order, firstProduct, organization);
                              const pdfBlob = doc.output('blob');
                              const url = URL.createObjectURL(pdfBlob);

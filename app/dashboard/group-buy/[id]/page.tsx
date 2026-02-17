@@ -19,7 +19,7 @@ export default function GroupBuyManagementPage() {
   const groupBuy = groupBuys.find(g => g.id === gbId);
   const factory = groupBuy ? factories.find(f => f.id === groupBuy.factoryId) : null;
   const supplier = factory ? suppliers.find(s => s.id === factory.supplierId) : null;
-  const gbProducts = groupBuy ? products.filter(p => groupBuy.productIds.includes(p.id)) : [];
+  const gbProducts = groupBuy ? products.filter(p => groupBuy.productIds?.includes(p.id)) : [];
   
   const participants = useMemo(() => {
     if (!gbId) return [];
