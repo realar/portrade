@@ -62,7 +62,7 @@ export default function SupplierView() {
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-6">Мои фабрики</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {factories.map(factory => {
+          {(factories || []).map(factory => {
             const activeGB = groupBuys.find(g => g.factoryId === factory.id && g.status === 'open');
             const factoryProducts = products.filter(p => p.factoryId === factory.id);
             const progress = activeGB ? Math.min(Math.round((activeGB.currentQuantity / activeGB.targetQuantity) * 100), 100) : 0;
@@ -102,7 +102,7 @@ export default function SupplierView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {groupBuys.map((gb) => {
+              {(groupBuys || []).map((gb) => {
                 const factory = factories.find(f => f.id === gb.factoryId);
                 const progress = Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100);
                 
@@ -180,7 +180,7 @@ export default function SupplierView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {products.map((product) => {
+              {(products || []).map((product) => {
                 const factory = factories.find(f => f.id === product.factoryId);
                 return (
                   <tr key={product.id} className="hover:bg-gray-50 transition-colors">

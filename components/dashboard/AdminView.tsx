@@ -36,7 +36,7 @@ export default function AdminView() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {groupBuys.map((gb) => {
+            {(groupBuys || []).map((gb) => {
               const factory = factories.find(f => f.id === gb.factoryId);
               const supplier = factory ? suppliers.find(s => s.id === factory.supplierId) : null;
               return (
