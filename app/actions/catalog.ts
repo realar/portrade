@@ -123,10 +123,50 @@ export async function readCatalog(): Promise<CatalogData> {
   };
 
   // Seed DB if we read from file and DB was accessible but empty
-  if (dbWasEmpty && rawData && pool) {
+  // OR if the DB data seems significantly incomplete (e.g. no products) and we have file data
+  const dbDataSeemsEmpty = !rawData?.products || rawData.products.length === 0;
+
+  if ((dbWasEmpty || dbDataSeemsEmpty) && pool) {
      try {
-       await saveCatalogToDB(safeData);
-       console.log("Seeded database from local file.");
+       // If we are here, we might need to reload from file if we haven't already
+       if (!dbWasEmpty) {
+          // DB wasn't technically "empty" (returned a row), but products were empty.
+          // We need to fetch from file now to have something to save.
+          // Note: effectively we might be overwriting the DB with file content.
+          // But `safeData` is currently built from `rawData` which came from DB!
+          
+          // We need to re-read from file to get the actual data to seed.
+          try {
+             if (process.env.DATA_FILE_PATH) {
+                 // Check if file exists, copy if not (same as above)
+                 // This part is duplicated but necessary to ensure we have file data
+                 try { await fs.access(CATALOG_PATH); } catch { /* ignore or copy */ }
+             }
+             const fileContent = await fs.readFile(CATALOG_PATH, 'utf-8');
+             const fileData = JSON.parse(fileContent);
+             
+             // Update safeData with file data
+             safeData.categories = fileData.categories || [];
+             safeData.products = fileData.products || [];
+             safeData.groupBuys = fileData.groupBuys || [];
+             safeData.banners = fileData.banners || [];
+             // ... update other fields if needed
+             
+             // Now save THIS data to DB
+             await saveCatalogToDB(safeData);
+             console.log("Re-seeded database because it appeared empty (no products).");
+          } catch (err) {
+             console.error("Failed to re-read file for seeding:", err);
+          }
+       } else {
+          // DB was completely empty, and safeData is already built from file (if read loop above ran)
+          // Wait, if dbWasEmpty=true, rawData was null, so we entered the "if (!rawData)" block
+          // and read from file. So safeData IS from file.
+          if (safeData.products.length > 0) {
+              await saveCatalogToDB(safeData);
+              console.log("Seeded database from local file.");
+          }
+       }
      } catch (e) {
        console.error("Failed to seed DB:", e);
      }

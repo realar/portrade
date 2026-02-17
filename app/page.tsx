@@ -28,7 +28,7 @@ export default async function Home() {
   // Enrich products with group buy info for display
   const enrichProducts = (productList: Product[]): EnrichedProduct[] => {
     return productList.map(p => {
-      const gb = catalog.groupBuys.find((g) => g.productIds.includes(p.id) && g.status === 'open');
+      const gb = catalog.groupBuys.find((g) => g.productIds?.includes(p.id) && g.status === 'open');
       if (gb) {
         const remaining = gb.targetQuantity - gb.currentQuantity;
         const progress = Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100);

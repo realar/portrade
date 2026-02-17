@@ -25,9 +25,9 @@ export default function GroupBuyPage() {
   const factory = factories.find(f => f.id === gb?.factoryId);
   const supplier = factory ? suppliers.find(s => s.id === factory.supplierId) : null;
   
-  // Safe filtering even if gb is undefined (will handle in return)
+  /* Safe filtering even if gb is undefined */
   const gbProducts = useMemo(() => {
-    return gb ? products.filter(p => gb.productIds.includes(p.id)) : [];
+    return gb ? products.filter(p => gb.productIds?.includes(p.id)) : [];
   }, [gb, products]);
   
   // Categories for sidebar
