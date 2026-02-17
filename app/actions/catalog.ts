@@ -123,9 +123,12 @@ export async function readCatalog(): Promise<CatalogData> {
   };
 
   // Seed DB if we read from file and DB was accessible but empty
-  // OR if the DB data seems significantly incomplete (e.g. no products) and we have file data
+  // OR if the DB data seems significantly incomplete (e.g. no products, suppliers or factories) and we have file data
   // OR if data seems corrupt (e.g. group buys without productIds)
-  const dbDataSeemsEmpty = !rawData?.products || rawData.products.length === 0;
+  const dbDataSeemsEmpty = 
+    (!rawData?.products || rawData.products.length === 0) ||
+    (!rawData?.suppliers || rawData.suppliers.length === 0) ||
+    (!rawData?.factories || rawData.factories.length === 0);
   const dbDataSeemsCorrupt = rawData?.groupBuys?.some(gb => !gb.productIds) || false;
 
   if ((dbWasEmpty || dbDataSeemsEmpty || dbDataSeemsCorrupt) && pool) {
@@ -153,6 +156,9 @@ export async function readCatalog(): Promise<CatalogData> {
              safeData.products = fileData.products || [];
              safeData.groupBuys = fileData.groupBuys || [];
              safeData.banners = fileData.banners || [];
+             safeData.suppliers = fileData.suppliers || [];
+             safeData.factories = fileData.factories || [];
+             safeData.orders = fileData.orders || [];
              // ... update other fields if needed
              
              // Now save THIS data to DB
