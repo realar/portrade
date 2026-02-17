@@ -79,36 +79,60 @@ async function saveCatalogToDB(data: CatalogData) {
 }
 
 export async function readCatalog(): Promise<CatalogData> {
+  let rawData: Partial<CatalogData> | null = null;
+  let dbWasEmpty = false;
+
   if (pool) {
-    const dbData = await getCatalogFromDB();
-    if (dbData) return dbData;
-    console.log("Database empty. Seeding from local file...");
+    rawData = await getCatalogFromDB();
+    if (!rawData) {
+       console.log("Database empty. Seeding from local file...");
+       dbWasEmpty = true;
+    }
   }
 
-  try {
-    if (process.env.DATA_FILE_PATH) {
-      try {
-        await fs.access(CATALOG_PATH);
-      } catch {
-        console.log(`Seeding catalog from ${DEFAULT_CATALOG_PATH} to ${CATALOG_PATH}`);
-        await fs.mkdir(path.dirname(CATALOG_PATH), { recursive: true });
-        await fs.copyFile(DEFAULT_CATALOG_PATH, CATALOG_PATH);
+  if (!rawData) {
+    try {
+      if (process.env.DATA_FILE_PATH) {
+        try {
+          await fs.access(CATALOG_PATH);
+        } catch {
+          console.log(`Seeding catalog from ${DEFAULT_CATALOG_PATH} to ${CATALOG_PATH}`);
+          await fs.mkdir(path.dirname(CATALOG_PATH), { recursive: true });
+          await fs.copyFile(DEFAULT_CATALOG_PATH, CATALOG_PATH);
+        }
       }
-    }
 
-    const data = await fs.readFile(CATALOG_PATH, 'utf-8');
-    const parsedData = JSON.parse(data);
+      const fileContent = await fs.readFile(CATALOG_PATH, 'utf-8');
+      rawData = JSON.parse(fileContent);
 
-    if (pool) {
-      await saveCatalogToDB(parsedData);
-      console.log("Seeded database from local file.");
+    } catch (error) {
+      console.error('Error reading catalog:', error);
+      // We continue with null rawData to return empty structure
     }
-    
-    return parsedData;
-  } catch (error) {
-    console.error('Error reading catalog:', error);
-    throw new Error('Failed to read catalog data');
   }
+
+  // Ensure all fields exist
+  const safeData: CatalogData = {
+    categories: rawData?.categories || [],
+    banners: rawData?.banners || [],
+    suppliers: rawData?.suppliers || [],
+    factories: rawData?.factories || [],
+    products: rawData?.products || [],
+    groupBuys: rawData?.groupBuys || [],
+    orders: rawData?.orders || [],
+  };
+
+  // Seed DB if we read from file and DB was accessible but empty
+  if (dbWasEmpty && rawData && pool) {
+     try {
+       await saveCatalogToDB(safeData);
+       console.log("Seeded database from local file.");
+     } catch (e) {
+       console.error("Failed to seed DB:", e);
+     }
+  }
+
+  return safeData;
 }
 
 export async function saveCatalog(data: CatalogData): Promise<void> {
