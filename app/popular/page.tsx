@@ -5,6 +5,7 @@ import { Product } from '@/context/MockDataContext';
 
 interface EnrichedProduct extends Product {
     groupBuy?: {
+        id: number;
         participants: number;
         target: number;
         timeLeft: string;
@@ -12,53 +13,33 @@ interface EnrichedProduct extends Product {
     }
 }
 
-// Disable caching to show real-time group buy updates
 export const dynamic = 'force-dynamic';
 
 export default async function PopularPage() {
   const catalog = await readCatalog();
-  
-  // Helper: Check if group buy is in last 10% (by quantity remaining)
-  const isLastChance = (gb: { currentQuantity: number; targetQuantity: number }): boolean => {
-      const remaining = gb.targetQuantity - gb.currentQuantity;
-      const percentRemaining = remaining / gb.targetQuantity;
-      return percentRemaining < 0.1 && percentRemaining > 0;
-  };
 
-  // Combine product data with group buy info for display
-  const enrichProducts = (products: Product[]): EnrichedProduct[] => {
-      return products.map(p => {
-          const gb = catalog.groupBuys.find((g) => g.productId === p.id && g.status === 'open');
-          if (gb) {
-              const remaining = gb.targetQuantity - gb.currentQuantity;
-              return {
-                  ...p,
-                  timeLeft: remaining > 0 ? `${remaining} шт` : undefined,
-                  isLastChance: isLastChance(gb),
-                  groupBuy: {
-                      participants: Math.floor(gb.currentQuantity / 10 + 50),
-                      target: gb.targetQuantity,
-                      timeLeft: gb.deadline,
-                      progress: Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100)
-                  }
-              };
+  const enrichProducts = (productList: Product[]): EnrichedProduct[] => {
+    return productList.map(p => {
+      const gb = catalog.groupBuys.find(g => g.productIds.includes(p.id) && g.status === 'open');
+      if (gb) {
+        const remaining = gb.targetQuantity - gb.currentQuantity;
+        return {
+          ...p,
+          timeLeft: remaining > 0 ? `${remaining} шт` : undefined,
+          groupBuy: {
+            id: gb.id,
+            participants: Math.floor(gb.currentQuantity / 10 + 50),
+            target: gb.targetQuantity,
+            timeLeft: gb.deadline,
+            progress: Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100)
           }
-          return { ...p, timeLeft: undefined, isLastChance: false };
-      });
+        };
+      }
+      return { ...p, timeLeft: undefined };
+    });
   };
 
-  // Get last chance products
-  const lastChanceRaw = catalog.products.filter((p) => {
-      const gb = catalog.groupBuys.find((g) => g.productId === p.id && g.status === 'open');
-      return gb && isLastChance(gb);
-  });
-  
-  // Popular products: ALL products except those in last chance
-  const popularRaw = catalog.products.filter((p) => 
-      !lastChanceRaw.some(lc => lc.id === p.id)
-  );
-
-  const popularProducts = enrichProducts(popularRaw);
+  const popularProducts = enrichProducts(catalog.products);
 
   return (
     <div className="min-h-screen bg-white">

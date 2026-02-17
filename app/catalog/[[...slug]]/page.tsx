@@ -1,91 +1,61 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
+import FactoryCard from '@/components/FactoryCard';
 import ProductCard from '@/components/ProductCard';
 import { readCatalog, Category } from '@/app/actions/catalog';
-
-interface Product {
-  id: number;
-  category: string;
-  name: string;
-  price: number;
-  description?: string;
-  specs?: { name: string; value: string }[];
-  groupBuy?: {
-    participants: number;
-    target: number;
-    timeLeft: string;
-    progress: number;
-  };
-  images?: string[];
-  timeLeft?: string;
-  isLastChance?: boolean;
-}
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
 }
 
-// Disable caching to show real-time group buy updates
 export const dynamic = 'force-dynamic';
 
 export default async function CatalogPage({ params }: PageProps) {
   const { slug } = await params;
-  const categoryId = slug && slug.length > 0 ? Number(slug[0]) : null;
+  const categoryId = slug && slug.length > 0 ? slug[0] : null;
   
   const catalog = await readCatalog();
 
-  // Find category name if ID is present
   const currentCategory = categoryId 
     ? catalog.categories.find((c: Category) => c.id === categoryId) 
-    : { name: "Все товары", id: null };
+    : null;
 
-  // Get products from the new single source
-  let products = catalog.products as Product[];
-  
-  // Helper: Check if group buy is in last 10% (by quantity remaining)
-  const isLastChance = (gb: { currentQuantity: number; targetQuantity: number }): boolean => {
+  // Get factories matching category
+  const matchingFactories = categoryId && currentCategory
+    ? catalog.factories.filter(f => f.categories.includes(currentCategory.id))
+    : catalog.factories;
+
+  // For "All" view, show products directly
+  const allProducts = categoryId && currentCategory
+    ? catalog.products.filter(p => p.category === currentCategory.id)
+    : catalog.products;
+
+  // Enrich products with group buy info
+  const enrichedProducts = allProducts.map(p => {
+    const gb = catalog.groupBuys.find(g => g.productIds.includes(p.id) && g.status === 'open');
+    if (gb) {
       const remaining = gb.targetQuantity - gb.currentQuantity;
-      const percentRemaining = remaining / gb.targetQuantity;
-      return percentRemaining < 0.1 && percentRemaining > 0;
-  };
-
-  // Enrich products with group buy info (only for open group buys)
-  products = products.map(p => {
-      const gb = catalog.groupBuys.find((g) => g.productId === p.id && g.status === 'open');
-      if (gb) {
-          const remaining = gb.targetQuantity - gb.currentQuantity;
-          return {
-              ...p,
-              timeLeft: remaining > 0 ? `${remaining} шт` : undefined,
-              isLastChance: isLastChance(gb),
-              groupBuy: {
-                  participants: Math.floor(gb.currentQuantity / 10 + 50),
-                  target: gb.targetQuantity,
-                  timeLeft: gb.deadline,
-                  progress: Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100)
-              }
-          };
-      }
-      // Explicitly set timeLeft to undefined for products without open group buys
-      return { ...p, timeLeft: undefined, isLastChance: false };
+      const progress = Math.round((gb.currentQuantity / gb.targetQuantity) * 100);
+      return {
+        ...p,
+        timeLeft: remaining > 0 ? `${remaining} шт` : undefined,
+        isLastChance: progress >= 80,
+        groupBuyId: gb.id,
+      };
+    }
+    return { ...p, timeLeft: undefined, isLastChance: false, groupBuyId: undefined };
   });
 
-  if (categoryId) {
-    // In our mock data, "category" is a string name (e.g. "Категория 1").
-    // But our categories in catalog.json have IDs (e.g. 1).
-    // The products' "category" field currently holds the NAME.
-    // So we need to match the category ID to its name first.
-    
-    // Check if the current category was found
-    if (currentCategory && currentCategory.id) {
-       products = products.filter(p => p.category === currentCategory.name);
-    }
-  }
+  const breadcrumbsItems = currentCategory 
+    ? [{ label: 'Каталог', href: '/catalog' }, { label: currentCategory.name }]
+    : [{ label: 'Каталог' }];
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
       <main className="max-w-[1400px] mx-auto pb-20 pt-8 px-6 md:px-12">
+        <Breadcrumbs items={breadcrumbsItems} className="mb-6" />
         <h1 className="text-3xl font-bold text-gray-900 mb-8">{currentCategory?.name || "Каталог"}</h1>
         
         <div className="flex flex-col md:flex-row gap-8">
@@ -113,11 +83,44 @@ export default async function CatalogPage({ params }: PageProps) {
              </div>
           </aside>
 
-          {/* Product Grid */}
+          {/* Content */}
           <div className="flex-1">
-            {products.length > 0 ? (
+            {/* Factories in this category */}
+            {categoryId && matchingFactories.length > 0 && (
+              <div className="mb-10">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Фабрики и поставщики</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  {matchingFactories.map(factory => {
+                    const supplier = catalog.suppliers.find(s => s.id === factory.supplierId);
+                    const gb = catalog.groupBuys.find(g => g.factoryId === factory.id && g.status === 'open');
+                    const factoryProducts = catalog.products.filter(p => p.factoryId === factory.id);
+                    const progress = gb ? Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100) : undefined;
+
+                    return (
+                      <FactoryCard
+                        key={factory.id}
+                        id={factory.id}
+                        name={factory.name}
+                        brands={factory.brands}
+                        supplierName={supplier?.name || 'Поставщик'}
+                        image={factory.image}
+                        groupBuyProgress={progress}
+                        groupBuyDeadline={gb?.deadline}
+                        productCount={factoryProducts.length}
+                      />
+                    );
+                  })}
+                </div>
+                <div className="border-t border-gray-100 pt-8">
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Все товары в категории</h2>
+                </div>
+              </div>
+            )}
+
+            {/* Product Grid */}
+            {enrichedProducts.length > 0 ? (
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-                 {products.map((product) => (
+                 {enrichedProducts.map((product) => (
                    <ProductCard
                      key={product.id}
                      id={product.id}
@@ -128,6 +131,7 @@ export default async function CatalogPage({ params }: PageProps) {
                      image={product.images?.[0]}
                      images={product.images}
                      isLastChance={product.isLastChance}
+                     groupBuyId={product.groupBuyId}
                    />
                  ))}
               </div>

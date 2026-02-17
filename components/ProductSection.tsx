@@ -7,8 +7,12 @@ interface Product {
   category: string;
   name: string;
   price: number;
+  tieredPricing?: { price: number; minQty: number; maxQty: number }[];
   timeLeft?: string;
   images?: string[];
+  groupBuy?: {
+    id: number;
+  };
 }
 
 interface ProductSectionProps {
@@ -44,6 +48,8 @@ export default function ProductSection({ title, products, icon, showAllLink }: P
             image={product.images?.[0]}
             images={product.images}
             isLastChance={icon === 'fire'}
+            groupBuyId={product.groupBuy?.id}
+            tieredPricing={product.tieredPricing}
           />
         ))}
       </div>

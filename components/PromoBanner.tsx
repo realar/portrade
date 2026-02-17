@@ -6,8 +6,7 @@ interface PromoBannerProps {
   subtitle: string;
   buttonText: string;
   image: string;
-  backgroundColor: string;
-  circleColor: string;
+  bgColor: string;
   link: string;
 }
 
@@ -16,13 +15,17 @@ export default function PromoBanner({
   subtitle,
   buttonText,
   image,
-  backgroundColor,
-  circleColor,
+  bgColor,
   link
 }: PromoBannerProps) {
+  const isHex = bgColor?.startsWith('#');
+
   return (
-    <div className={`w-full rounded-2xl overflow-hidden ${backgroundColor} text-white relative shadow-lg`}>
-      <div className="flex flex-col md:flex-row items-center justify-between pl-8 md:pl-16 relative z-10">
+    <div 
+      className={`w-full rounded-2xl overflow-hidden text-white relative shadow-lg ${!isHex ? bgColor : ''}`}
+      style={isHex ? { backgroundColor: bgColor } : undefined}
+    >
+      <div className="flex flex-col md:flex-row items-center justify-between pt-8 md:pt-0 pl-6 md:pl-16 pr-6 md:pr-0 relative z-10">
         
         {/* Left Content */}
         <div className="flex-1 max-w-lg mb-8 md:mb-0 z-10">
@@ -41,13 +44,13 @@ export default function PromoBanner({
         {/* Right Image with Circle Background */}
         <div className="relative w-64 h-64 md:w-80 md:h-80 flex-shrink-0 flex items-center justify-center">
              {/* Circle Background */}
-             <div className={`absolute inset-0 rounded-full ${circleColor} opacity-50 scale-250 md:scale-300`} />
+             <div className="absolute inset-0 rounded-full bg-white opacity-20 scale-250 md:scale-300 translate-y-32 md:translate-y-0 md:translate-x-16" />
              
              {/* Product Image */}
              <img 
                src={image} 
                alt={title} 
-               className="relative z-10 w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+               className="relative z-10 w-full h-full object-contain object-bottom drop-shadow-2xl hover:scale-105 transition-transform duration-500"
              />
         </div>
       </div>

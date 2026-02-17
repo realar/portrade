@@ -10,7 +10,7 @@ import EditProductModal from '@/components/modals/EditProductModal';
 import { Product } from '@/context/MockDataContext';
 
 export default function SupplierView() {
-  const { products, importProducts, groupBuys, updateProduct } = useMockData();
+  const { products, importProducts, groupBuys, factories, updateProduct } = useMockData();
   const [isImporting, setIsImporting] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const router = useRouter();
@@ -23,19 +23,18 @@ export default function SupplierView() {
 
   const handleImport = () => {
     setIsImporting(true);
-    // Simulate Excel parsing delay
     setTimeout(() => {
-        importProducts([
-            { id: Date.now(), name: 'Новый Товар (Импорт)', category: 'Электроника', price: 5000, currency: 'RUB', stock: 100, factoryId: 'f1', minOrder: 10 },
-            { id: Date.now() + 1, name: 'Аксессуар (Импорт)', category: 'Электроника', price: 1500, currency: 'RUB', stock: 500, factoryId: 'f1', minOrder: 20 },
-        ]);
-        setIsImporting(false);
+      importProducts([
+        { id: Date.now(), name: 'Новый Товар (Импорт)', category: 'Электроника', price: 5000, factoryId: 'fac-1' },
+        { id: Date.now() + 1, name: 'Аксессуар (Импорт)', category: 'Электроника', price: 1500, factoryId: 'fac-1' },
+      ]);
+      setIsImporting(false);
     }, 1500);
   };
 
   const handleSaveProduct = (updatedProduct: Product) => {
-      updateProduct(updatedProduct);
-      setEditingProduct(null);
+    updateProduct(updatedProduct);
+    setEditingProduct(null);
   };
 
   return (
@@ -59,6 +58,35 @@ export default function SupplierView() {
         })}
       </div>
 
+      {/* Factories */}
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Мои фабрики</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {factories.map(factory => {
+            const activeGB = groupBuys.find(g => g.factoryId === factory.id && g.status === 'open');
+            const factoryProducts = products.filter(p => p.factoryId === factory.id);
+            const progress = activeGB ? Math.min(Math.round((activeGB.currentQuantity / activeGB.targetQuantity) * 100), 100) : 0;
+            return (
+              <Link key={factory.id} href={`/factory/${factory.id}`} className="bg-white p-5 rounded-xl border border-gray-200 hover:border-primary-200 hover:shadow-sm transition-all">
+                <h3 className="font-semibold text-gray-900 mb-1">{factory.name}</h3>
+                <p className="text-xs text-gray-500 mb-3">Товаров: {factoryProducts.length} · Бренды: {factory.brands.join(', ')}</p>
+                {activeGB && (
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>Закупка #{activeGB.id}</span>
+                      <span>{progress}%</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-primary-500 rounded-full" style={{ width: `${progress}%` }} />
+                    </div>
+                  </div>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Active Group Buys */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-6">Активные сборы</h2>
@@ -67,7 +95,7 @@ export default function SupplierView() {
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
                 <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Лот</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Товар</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Фабрика</th>
                 <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Прогресс сбора</th>
                 <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Дедлайн</th>
                 <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Статус</th>
@@ -75,31 +103,17 @@ export default function SupplierView() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {groupBuys.map((gb) => {
-                 // In a real app, filter by supplier's products. 
-                 // Here we show all for simulation visibility or assume all mock products belong to this supplier.
-                 const product = products.find(p => p.id === gb.productId);
-                 const progress = Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100);
-                 
-                 return (
+                const factory = factories.find(f => f.id === gb.factoryId);
+                const progress = Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100);
+                
+                return (
                   <tr 
-                      key={gb.id} 
-                      onClick={() => router.push(`/dashboard/group-buy/${gb.id}`)}
-                      className="hover:bg-gray-50 transition-colors cursor-pointer"
+                    key={gb.id} 
+                    onClick={() => router.push(`/group-buy/${gb.id}`)}
+                    className="hover:bg-gray-50 transition-colors cursor-pointer"
                   >
-                    <td className="py-4 px-6 font-medium text-gray-900">
-                        #{gb.id}
-                    </td>
-                    <td className="py-4 px-6 text-gray-600">
-                      {product ? (
-                        <Link 
-                            href={`/product/${product.id}`} 
-                            onClick={(e) => e.stopPropagation()}
-                            className="hover:text-primary-600 transition-colors font-medium"
-                        >
-                          {product.name}
-                        </Link>
-                      ) : 'Unknown'}
-                    </td>
+                    <td className="py-4 px-6 font-medium text-gray-900">#{gb.id}</td>
+                    <td className="py-4 px-6 text-gray-600">{factory?.name || 'Unknown'}</td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden w-24">
@@ -123,7 +137,7 @@ export default function SupplierView() {
                        </span>
                     </td>
                   </tr>
-                 );
+                );
               })}
               {groupBuys.length === 0 && (
                 <tr>
@@ -160,37 +174,34 @@ export default function SupplierView() {
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
                 <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Название</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Фабрика</th>
                 <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Цена</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Остаток</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Статус</th>
                 <th className="text-right py-4 px-6 text-sm font-medium text-gray-500">Действия</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {products.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="py-4 px-6 font-medium text-gray-900">
-                    <Link href={`/product/${product.id}`} className="hover:text-primary-600 transition-colors">
-                      {product.name}
-                    </Link>
-                  </td>
-                  <td className="py-4 px-6 text-gray-600"><Price amount={product.price} /></td>
-                  <td className="py-4 px-6 text-gray-600">{product.stock} шт.</td>
-                  <td className="py-4 px-6">
-                    {product.stock > 50 && <span className="text-xs font-medium bg-green-100 text-green-700 px-2 py-1 rounded-full">Активен</span>}
-                    {product.stock <= 50 && product.stock > 0 && <span className="text-xs font-medium bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full flex items-center w-fit gap-1"><AlertCircle className="w-3 h-3"/> Мало</span>}
-                    {product.stock === 0 && <span className="text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">Нет в наличии</span>}
-                  </td>
-                  <td className="py-4 px-6 text-right">
-                    <button 
-                      onClick={() => setEditingProduct(product)}
-                      className="text-gray-400 hover:text-gray-600 font-medium text-sm"
-                    >
-                      Изменить
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {products.map((product) => {
+                const factory = factories.find(f => f.id === product.factoryId);
+                return (
+                  <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="py-4 px-6 font-medium text-gray-900">
+                      <Link href={`/product/${product.id}`} className="hover:text-primary-600 transition-colors">
+                        {product.name}
+                      </Link>
+                    </td>
+                    <td className="py-4 px-6 text-gray-600 text-sm">{factory?.name || '-'}</td>
+                    <td className="py-4 px-6 text-gray-600"><Price amount={product.price} /></td>
+                    <td className="py-4 px-6 text-right">
+                      <button 
+                        onClick={() => setEditingProduct(product)}
+                        className="text-gray-400 hover:text-gray-600 font-medium text-sm"
+                      >
+                        Изменить
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

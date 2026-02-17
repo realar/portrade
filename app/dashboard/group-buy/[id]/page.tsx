@@ -2,7 +2,7 @@
 
 import { useMockData, GroupBuyStatus } from '@/context/MockDataContext';
 import { notFound, useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Package, User, Clock, CheckCircle, Truck, FileText, AlertTriangle, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Package, User, Clock, CheckCircle, Truck, FileText, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import Price from '@/components/Price';
 import { useState, useMemo } from 'react';
@@ -10,33 +10,30 @@ import { useState, useMemo } from 'react';
 export default function GroupBuyManagementPage() {
   const params = useParams();
   const router = useRouter();
-  const { groupBuys, products, orders, updateGroupBuyStatus, user } = useMockData();
+  const { groupBuys, products, orders, factories, suppliers, updateGroupBuyStatus, user } = useMockData();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Parse ID
   const idParam = params?.id;
   const gbId = idParam ? parseInt(Array.isArray(idParam) ? idParam[0] : idParam) : null;
 
   const groupBuy = groupBuys.find(g => g.id === gbId);
-  const product = groupBuy ? products.find(p => p.id === groupBuy.productId) : null;
+  const factory = groupBuy ? factories.find(f => f.id === groupBuy.factoryId) : null;
+  const supplier = factory ? suppliers.find(s => s.id === factory.supplierId) : null;
+  const gbProducts = groupBuy ? products.filter(p => groupBuy.productIds.includes(p.id)) : [];
   
-  // Get participants (orders for this group buy)
   const participants = useMemo(() => {
     if (!gbId) return [];
     return orders.filter(o => o.groupBuyId === gbId);
   }, [orders, gbId]);
 
-  // Calculate stats
   const totalCollected = participants.reduce((sum, order) => sum + order.total, 0);
   const uniqueBuyers = new Set(participants.map(p => p.userId)).size;
   const progressPercent = groupBuy ? Math.min(Math.round((groupBuy.currentQuantity / groupBuy.targetQuantity) * 100), 100) : 0;
 
-  if (!groupBuy || !product) {
+  if (!groupBuy) {
     return notFound();
   }
 
-  // Permission check (simplified for mock)
-  // In real app, check if user is admin or the supplier of this product
   if (user?.role === 'buyer') {
      return (
         <div className="min-h-screen flex items-center justify-center">
@@ -52,7 +49,6 @@ export default function GroupBuyManagementPage() {
 
   const handleStatusChange = (newStatus: GroupBuyStatus) => {
       setIsUpdating(true);
-      // Simulate API call
       setTimeout(() => {
           updateGroupBuyStatus(groupBuy.id, newStatus);
           setIsUpdating(false);
@@ -69,9 +65,10 @@ export default function GroupBuyManagementPage() {
       { value: 'delivered', label: 'Доставлено', color: 'bg-emerald-100 text-emerald-700' },
   ];
 
+  const avgPrice = gbProducts.length > 0 ? gbProducts.reduce((s, p) => s + p.price, 0) / gbProducts.length : 0;
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -83,17 +80,17 @@ export default function GroupBuyManagementPage() {
             </button>
             <div>
                  <h1 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    Сбор #{groupBuy.id}
+                    {factory?.name || `Сбор #${groupBuy.id}`}
                     <span className={`text-xs px-2 py-0.5 rounded-full ${statusOptions.find(o => o.value === groupBuy.status)?.color}`}>
                         {statusOptions.find(o => o.value === groupBuy.status)?.label}
                     </span>
                  </h1>
-                 <p className="text-sm text-gray-500">Управление и статистика</p>
+                 <p className="text-sm text-gray-500">{supplier?.name} · Управление и статистика</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-             <Link href={`/product/${product.id}`} className="text-sm font-medium text-primary-600 hover:text-primary-700">
-                Страница товара
+             <Link href={`/group-buy/${groupBuy.id}`} className="text-sm font-medium text-primary-600 hover:text-primary-700">
+                Страница закупки
              </Link>
           </div>
         </div>
@@ -101,7 +98,7 @@ export default function GroupBuyManagementPage() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
           
-          {/* Status Control Panel */}
+          {/* Status Control */}
           <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                  <div>
@@ -123,7 +120,6 @@ export default function GroupBuyManagementPage() {
                  </div>
              </div>
              
-             {/* Progress Bar Visual */}
              <div className="mt-6">
                 <div className="flex justify-between text-sm mb-2">
                     <span className="font-medium text-gray-700">Прогресс выполнения</span>
@@ -135,89 +131,97 @@ export default function GroupBuyManagementPage() {
                         style={{ width: `${progressPercent}%` }}
                     />
                 </div>
+                <div className="text-xs text-gray-500 mt-1">Макс. объём: {groupBuy.maxVolume} шт.</div>
              </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
-              {/* Product Info Card */}
-              <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-                 <div className="p-6 border-b border-gray-100 flex items-start gap-4">
-                     <div className="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                        {product.images?.[0] ? (
-                            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover rounded-lg" />
-                        ) : (
-                            <Package className="w-8 h-8 text-gray-400" />
-                        )}
-                     </div>
-                     <div>
-                         <h3 className="font-semibold text-gray-900">{product.name}</h3>
-                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                             <div className="flex items-center gap-1">
-                                 <Price amount={groupBuy.price} /> / шт.
-                             </div>
-                             <div>•</div>
-                             <div>Код товара: {product.id}</div>
-                         </div>
-                     </div>
-                 </div>
+              {/* Products + Participants */}
+              <div className="lg:col-span-2 space-y-6">
+                {/* Products in group buy */}
+                <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                  <h3 className="font-semibold text-gray-900 mb-4">Товары в закупке ({gbProducts.length})</h3>
+                  <div className="space-y-3">
+                    {gbProducts.map(product => (
+                      <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg bg-gray-50">
+                        <div className="w-12 h-12 bg-white rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                          {product.images?.[0] ? (
+                            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <Package className="w-5 h-5 text-gray-400" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <Link href={`/product/${product.id}`} className="font-medium text-gray-900 hover:text-primary-600 text-sm">{product.name}</Link>
+                          <div className="text-xs text-gray-500"><Price amount={product.price} /> / шт.</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-                 {/* Participants Table */}
-                 <div className="p-6">
-                     <div className="flex items-center justify-between mb-4">
-                         <h3 className="font-semibold text-gray-900">Участники сбора ({participants.length})</h3>
-                         <button className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1">
-                             <FileText className="w-4 h-4" />
-                             Выгрузить список
-                         </button>
-                     </div>
-                     
-                     {participants.length > 0 ? (
-                         <div className="overflow-x-auto">
-                             <table className="w-full text-sm text-left">
-                                 <thead className="bg-gray-50 text-gray-500 font-medium">
-                                     <tr>
-                                         <th className="py-3 px-4 rounded-l-lg">ID Заказа</th>
-                                         <th className="py-3 px-4">Покупатель</th>
-                                         <th className="py-3 px-4">Кол-во</th>
-                                         <th className="py-3 px-4">Сумма</th>
-                                         <th className="py-3 px-4">Дата</th>
-                                         <th className="py-3 px-4 rounded-r-lg">Статус</th>
-                                     </tr>
-                                 </thead>
-                                 <tbody className="divide-y divide-gray-100">
-                                     {participants.map(order => (
-                                         <tr key={order.id} className="group hover:bg-gray-50">
-                                             <td className="py-3 px-4 font-medium text-gray-900">{order.id}</td>
-                                             <td className="py-3 px-4 text-gray-600">
-                                                 <div className="flex items-center gap-2">
-                                                     <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500">
-                                                         <User className="w-3 h-3" />
-                                                     </div>
-                                                     {order.userId}
-                                                 </div>
-                                             </td>
-                                             <td className="py-3 px-4 text-gray-900">{order.quantity} шт.</td>
-                                             <td className="py-3 px-4 font-medium text-gray-900">
-                                                 <Price amount={order.total} />
-                                             </td>
-                                             <td className="py-3 px-4 text-gray-500">{order.date}</td>
-                                             <td className="py-3 px-4">
-                                                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                                     Активен
-                                                 </span>
-                                             </td>
-                                         </tr>
-                                     ))}
-                                 </tbody>
-                             </table>
-                         </div>
-                     ) : (
-                         <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
-                             Пока нет участников
-                         </div>
-                     )}
-                 </div>
+                {/* Participants */}
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                  <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                    <h3 className="font-semibold text-gray-900">Участники сбора ({participants.length})</h3>
+                    <button className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1">
+                        <FileText className="w-4 h-4" />
+                        Выгрузить список
+                    </button>
+                  </div>
+                  
+                  {participants.length > 0 ? (
+                      <div className="overflow-x-auto">
+                          <table className="w-full text-sm text-left">
+                              <thead className="bg-gray-50 text-gray-500 font-medium">
+                                  <tr>
+                                      <th className="py-3 px-4">ID Заказа</th>
+                                      <th className="py-3 px-4">Покупатель</th>
+                                      <th className="py-3 px-4">Товары</th>
+                                      <th className="py-3 px-4">Сумма</th>
+                                      <th className="py-3 px-4">Дата</th>
+                                      <th className="py-3 px-4">Статус</th>
+                                  </tr>
+                              </thead>
+                              <tbody className="divide-y divide-gray-100">
+                                  {participants.map(order => (
+                                      <tr key={order.id} className="group hover:bg-gray-50">
+                                          <td className="py-3 px-4 font-medium text-gray-900 text-xs">{order.id.slice(-8)}</td>
+                                          <td className="py-3 px-4 text-gray-600">
+                                              <div className="flex items-center gap-2">
+                                                  <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500">
+                                                      <User className="w-3 h-3" />
+                                                  </div>
+                                                  {order.userId}
+                                              </div>
+                                          </td>
+                                          <td className="py-3 px-4 text-gray-600">
+                                            {order.items.map(item => {
+                                              const p = products.find(prod => prod.id === item.productId);
+                                              return <div key={item.productId} className="text-xs">{p?.name || `#${item.productId}`} × {item.quantity}</div>;
+                                            })}
+                                          </td>
+                                          <td className="py-3 px-4 font-medium text-gray-900">
+                                              <Price amount={order.total} />
+                                          </td>
+                                          <td className="py-3 px-4 text-gray-500 text-xs">{new Date(order.date).toLocaleDateString('ru')}</td>
+                                          <td className="py-3 px-4">
+                                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                                  Активен
+                                              </span>
+                                          </td>
+                                      </tr>
+                                  ))}
+                              </tbody>
+                          </table>
+                      </div>
+                  ) : (
+                      <div className="text-center py-8 text-gray-500 bg-gray-50">
+                          Пока нет участников
+                      </div>
+                  )}
+                </div>
               </div>
 
               {/* Stats Sidebar */}
@@ -234,10 +238,10 @@ export default function GroupBuyManagementPage() {
                           <div className="pt-4 border-t border-gray-100">
                               <div className="text-sm text-gray-500 mb-1">Ожидаемая выручка</div>
                               <div className="text-lg font-medium text-gray-900">
-                                  <Price amount={groupBuy.targetQuantity * groupBuy.price} />
+                                  <Price amount={groupBuy.targetQuantity * avgPrice} />
                               </div>
                               <div className="text-xs text-green-600 mt-1">
-                                  Осталось собрать: <Price amount={(groupBuy.targetQuantity * groupBuy.price) - totalCollected} />
+                                  Осталось собрать: <Price amount={Math.max(0, (groupBuy.targetQuantity * avgPrice) - totalCollected)} />
                               </div>
                           </div>
                       </div>
@@ -247,8 +251,8 @@ export default function GroupBuyManagementPage() {
                       <h3 className="font-semibold text-gray-900 mb-4">Детали</h3>
                       <div className="space-y-3 text-sm">
                           <div className="flex justify-between">
-                              <span className="text-gray-500">Дата создания</span>
-                              <span className="text-gray-900">01.02.2024</span>
+                              <span className="text-gray-500">Дата начала</span>
+                              <span className="text-gray-900">{groupBuy.startDate}</span>
                           </div>
                           <div className="flex justify-between">
                               <span className="text-gray-500">Дедлайн</span>
@@ -262,17 +266,20 @@ export default function GroupBuyManagementPage() {
                               <span className="text-gray-500">Минималка</span>
                               <span className="text-gray-900">{groupBuy.targetQuantity} шт.</span>
                           </div>
+                          <div className="flex justify-between">
+                              <span className="text-gray-500">Макс. объём</span>
+                              <span className="text-gray-900">{groupBuy.maxVolume} шт.</span>
+                          </div>
                       </div>
                   </div>
                   
-                  {/* Warning/Alerts */}
                   {groupBuy.status === 'open' && (
                       <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex gap-3">
                           <Clock className="w-5 h-5 text-blue-600 flex-shrink-0" />
                           <div>
                               <h4 className="font-medium text-blue-900 text-sm">Сбор активен</h4>
                               <p className="text-xs text-blue-700 mt-1">
-                                  До окончания срока осталось 12 дней. Не забудьте обновить статус после закрытия.
+                                  Не забудьте обновить статус после закрытия.
                               </p>
                           </div>
                       </div>

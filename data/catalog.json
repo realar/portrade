@@ -1,335 +1,1286 @@
 {
   "categories": [
     {
-      "id": 1,
+      "id": "electronics",
       "name": "Электроника и гаджеты",
-      "image": "/images/category/1.webp"
+      "image": "/images/category/1.webp",
+      "subCategories": [
+        "Смартфоны",
+        "Ноутбуки",
+        "Наушники",
+        "Умные часы",
+        "Аксессуары",
+        "Планшеты"
+      ]
     },
     {
-      "id": 2,
+      "id": "clothing",
+      "name": "Одежда и текстиль",
+      "image": "/images/category/2.webp",
+      "subCategories": [
+        "Женская одежда",
+        "Мужская одежда",
+        "Детская одежда",
+        "Обувь",
+        "Сумки",
+        "Аксессуары"
+      ]
+    },
+    {
+      "id": "home",
       "name": "Товары для дома",
-      "image": "/images/category/2.webp"
+      "image": "/images/category/3.webp",
+      "subCategories": [
+        "Текстиль",
+        "Кухня",
+        "Декор",
+        "Освещение",
+        "Мебель",
+        "Хранение"
+      ]
     },
     {
-      "id": 3,
+      "id": "kids",
       "name": "Детские товары",
-      "image": "/images/category/3.webp"
+      "image": "/images/category/4.webp",
+      "subCategories": [
+        "Игрушки",
+        "Коляски",
+        "Автокресла",
+        "Одежда",
+        "Питание",
+        "Гигиена"
+      ]
     },
     {
-      "id": 4,
-      "name": "Автотовары",
-      "image": "/images/category/4.webp"
-    },
-    {
-      "id": 5,
-      "name": "Зоотовары",
-      "image": "/images/category/5.webp"
-    },
-    {
-      "id": 6,
+      "id": "sport",
       "name": "Спорт и отдых",
-      "image": "/images/category/6.webp"
+      "image": "/images/category/5.webp",
+      "subCategories": [
+        "Тренажеры",
+        "Фитнес",
+        "Велоспорт",
+        "Туризм",
+        "Рыбалка",
+        "Спортивная одежда"
+      ]
+    },
+    {
+      "id": "beauty",
+      "name": "Красота и здоровье",
+      "image": "/images/category/6.webp",
+      "subCategories": [
+        "Косметика",
+        "Парфюмерия",
+        "Уход за волосами",
+        "Макияж",
+        "Маникюр",
+        "Здоровье"
+      ]
+    },
+    {
+      "id": "auto",
+      "name": "Автотовары",
+      "image": "https://picsum.photos/seed/cat-auto/800/600",
+      "subCategories": [
+        "Автохимия",
+        "Аксессуары",
+        "Электроника",
+        "Инструменты",
+        "Шины",
+        "Масла"
+      ]
     }
   ],
-  "banners": [
+  "suppliers": [
     {
-      "id": 1,
-      "title": "Хит сезона 2024",
-      "subtitle": "Беспроводные наушники с шумоподавлением",
-      "buttonText": "Купить оптом",
-      "image": "/images/category/1.webp",
-      "backgroundColor": "bg-primary-600",
-      "circleColor": "bg-primary-500",
-      "link": "/product/101"
+      "id": "sup-legacy",
+      "name": "Legacy Imports",
+      "logo": "https://robohash.org/legacy.png?set=set4",
+      "description": "Поставщик оригинальных товаров платформы.",
+      "rating": 5,
+      "completedDeals": 1000,
+      "country": "Россия",
+      "reviewsCount": 240,
+      "followersCount": 1500,
+      "registrationDate": "2018-05-12",
+      "totalOrders": 1250,
+      "skuCount": 450,
+      "lastSeen": "Сегодня",
+      "ratingHistory": [
+        {
+          "month": "Янв",
+          "rating": 4.8
+        },
+        {
+          "month": "Фев",
+          "rating": 4.9
+        },
+        {
+          "month": "Мар",
+          "rating": 5
+        },
+        {
+          "month": "Апр",
+          "rating": 5
+        },
+        {
+          "month": "Май",
+          "rating": 4.9
+        },
+        {
+          "month": "Июн",
+          "rating": 5
+        }
+      ],
+      "ratingBreakdown": [
+        {
+          "stars": 5,
+          "count": 200
+        },
+        {
+          "stars": 4,
+          "count": 30
+        },
+        {
+          "stars": 3,
+          "count": 10
+        },
+        {
+          "stars": 2,
+          "count": 0
+        },
+        {
+          "stars": 1,
+          "count": 0
+        }
+      ]
     },
     {
-      "id": 2,
-      "title": "Скидки до 40%",
-      "subtitle": "На товары для умного дома",
-      "buttonText": "Смотреть каталог",
-      "image": "/images/category/2.webp",
-      "backgroundColor": "bg-primary-600",
-      "circleColor": "bg-primary-500",
-      "link": "/catalog/2"
+      "id": "sup-1",
+      "name": "Shenzhen Tech Ltd",
+      "logo": "https://robohash.org/sup-1.png?set=set4",
+      "description": "Крупный поставщик электроники из Шэньчжэня. Работаем с 2010 года. Специализируемся на потребительской электронике и аксессуарах. Гарантия качества и быстрая логистика.",
+      "rating": 4.9,
+      "completedDeals": 342,
+      "country": "Китай",
+      "reviewsCount": 120,
+      "followersCount": 850,
+      "registrationDate": "2020-09-15",
+      "totalOrders": 380,
+      "skuCount": 120,
+      "lastSeen": "Вчера",
+      "ratingHistory": [
+        {
+          "month": "Янв",
+          "rating": 4.7
+        },
+        {
+          "month": "Фев",
+          "rating": 4.8
+        },
+        {
+          "month": "Мар",
+          "rating": 4.9
+        },
+        {
+          "month": "Апр",
+          "rating": 4.9
+        },
+        {
+          "month": "Май",
+          "rating": 4.8
+        },
+        {
+          "month": "Июн",
+          "rating": 4.9
+        }
+      ],
+      "ratingBreakdown": [
+        {
+          "stars": 5,
+          "count": 100
+        },
+        {
+          "stars": 4,
+          "count": 15
+        },
+        {
+          "stars": 3,
+          "count": 5
+        },
+        {
+          "stars": 2,
+          "count": 0
+        },
+        {
+          "stars": 1,
+          "count": 0
+        }
+      ]
+    },
+    {
+      "id": "sup-2",
+      "name": "Global Textiles Inc",
+      "logo": "https://robohash.org/sup-2.png?set=set4",
+      "description": "Производитель и экспортёр текстиля высокого качества. Собственные фабрики в Гуанчжоу и Турции. Широкий ассортимент тканей и готовой одежды.",
+      "rating": 4.8,
+      "completedDeals": 215,
+      "country": "Китай",
+      "reviewsCount": 85,
+      "followersCount": 620,
+      "registrationDate": "2021-02-20",
+      "totalOrders": 240,
+      "skuCount": 85,
+      "lastSeen": "3 дня назад",
+      "ratingHistory": [
+        {
+          "month": "Янв",
+          "rating": 4.6
+        },
+        {
+          "month": "Фев",
+          "rating": 4.7
+        },
+        {
+          "month": "Мар",
+          "rating": 4.8
+        },
+        {
+          "month": "Апр",
+          "rating": 4.8
+        },
+        {
+          "month": "Май",
+          "rating": 4.7
+        },
+        {
+          "month": "Июн",
+          "rating": 4.8
+        }
+      ],
+      "ratingBreakdown": [
+        {
+          "stars": 5,
+          "count": 70
+        },
+        {
+          "stars": 4,
+          "count": 10
+        },
+        {
+          "stars": 3,
+          "count": 5
+        },
+        {
+          "stars": 2,
+          "count": 0
+        },
+        {
+          "stars": 1,
+          "count": 0
+        }
+      ]
+    },
+    {
+      "id": "sup-3",
+      "name": "Home Decor Solutions",
+      "logo": "https://robohash.org/sup-3.png?set=set4",
+      "description": "Интерьерные решения напрямую от производителей. Мебель, декор, освещение. Эксклюзивные коллекции для B2B клиентов.",
+      "rating": 4.7,
+      "completedDeals": 189,
+      "country": "Вьетнам",
+      "reviewsCount": 64,
+      "followersCount": 410,
+      "registrationDate": "2022-01-10",
+      "totalOrders": 210,
+      "skuCount": 60,
+      "lastSeen": "Сегодня",
+      "ratingHistory": [
+        {
+          "month": "Янв",
+          "rating": 4.5
+        },
+        {
+          "month": "Фев",
+          "rating": 4.6
+        },
+        {
+          "month": "Мар",
+          "rating": 4.7
+        },
+        {
+          "month": "Апр",
+          "rating": 4.6
+        },
+        {
+          "month": "Май",
+          "rating": 4.7
+        },
+        {
+          "month": "Июн",
+          "rating": 4.7
+        }
+      ],
+      "ratingBreakdown": [
+        {
+          "stars": 5,
+          "count": 50
+        },
+        {
+          "stars": 4,
+          "count": 10
+        },
+        {
+          "stars": 3,
+          "count": 4
+        },
+        {
+          "stars": 2,
+          "count": 0
+        },
+        {
+          "stars": 1,
+          "count": 0
+        }
+      ]
+    },
+    {
+      "id": "sup-4",
+      "name": "Kids World Manufacturing",
+      "logo": "https://robohash.org/sup-4.png?set=set4",
+      "description": "Безопасные и развивающие игрушки из экологичных материалов. Сертификация по стандартам ЕС и США.",
+      "rating": 4.9,
+      "completedDeals": 156,
+      "country": "Китай",
+      "reviewsCount": 45,
+      "followersCount": 320,
+      "registrationDate": "2023-05-01",
+      "totalOrders": 170,
+      "skuCount": 40,
+      "lastSeen": "2 часа назад",
+      "ratingHistory": [
+        {
+          "month": "Янв",
+          "rating": 4.8
+        },
+        {
+          "month": "Фев",
+          "rating": 4.8
+        },
+        {
+          "month": "Мар",
+          "rating": 4.9
+        },
+        {
+          "month": "Апр",
+          "rating": 4.9
+        },
+        {
+          "month": "Май",
+          "rating": 4.8
+        },
+        {
+          "month": "Июн",
+          "rating": 4.9
+        }
+      ],
+      "ratingBreakdown": [
+        {
+          "stars": 5,
+          "count": 40
+        },
+        {
+          "stars": 4,
+          "count": 4
+        },
+        {
+          "stars": 3,
+          "count": 1
+        },
+        {
+          "stars": 2,
+          "count": 0
+        },
+        {
+          "stars": 1,
+          "count": 0
+        }
+      ]
+    }
+  ],
+  "factories": [
+    {
+      "id": "fac-legacy",
+      "supplierId": "sup-legacy",
+      "name": "Original Factory",
+      "description": "Фабрика оригинальных товаров. Производство полного цикла.",
+      "image": "/images/category/1.webp",
+      "categories": [
+        "electronics",
+        "home",
+        "clothing"
+      ],
+      "brands": [
+        "Original"
+      ],
+      "country": "Китай",
+      "city": "Гуанчжоу",
+      "foundedYear": 2005,
+      "employees": 150,
+      "employeesCount": 150,
+      "areaSqm": 3500,
+      "annualTurnover": "$5M - $10M",
+      "mainProducts": [
+        "Электроника",
+        "Текстиль"
+      ],
+      "certificates": [
+        "ISO 9001"
+      ],
+      "rating": 4.5,
+      "reviewsCount": 85,
+      "followersCount": 420,
+      "responseRate": 99,
+      "moq": "100 шт",
+      "leadTime": "30-45 дней"
+    },
+    {
+      "id": "fac-1",
+      "supplierId": "sup-1",
+      "name": "SoundTech Factory",
+      "description": "Современное производство аудиотехники в Шэньчжэне. 15 сборочных линий, собственные R&D лаборатории. Специализируемся на OEM/ODM производстве наушников и портативной акустики.",
+      "image": "https://picsum.photos/seed/fac-fac-1/800/600",
+      "categories": [
+        "electronics"
+      ],
+      "brands": [
+        "SoundPro",
+        "AudioX"
+      ],
+      "country": "Китай",
+      "city": "Шэньчжэнь",
+      "foundedYear": 2010,
+      "employeesCount": 520,
+      "areaSqm": 12000,
+      "annualTurnover": "$50M - $100M",
+      "mainProducts": [
+        "Наушники",
+        "Колонки",
+        "Микрофоны"
+      ],
+      "certificates": [
+        "ISO 9001:2015",
+        "CE",
+        "FCC",
+        "RoHS",
+        "BSCI"
+      ],
+      "rating": 4.9,
+      "reviewsCount": 124,
+      "followersCount": 1540,
+      "responseRate": 98,
+      "moq": "500 шт",
+      "leadTime": "25-35 дней",
+      "images_gallery": [
+        "https://picsum.photos/seed/fac-fac-1-1/800/600",
+        "https://picsum.photos/seed/fac-fac-1-2/800/600",
+        "https://picsum.photos/seed/fac-fac-1-3/800/600"
+      ]
+    },
+    {
+      "id": "fac-2",
+      "supplierId": "sup-2",
+      "name": "SilkWay Textile",
+      "description": "Фабрика полного цикла: от пряжи до упаковки. Специализация на натуральных тканях (хлопок, шелк, лен) и домашнем текстиле премиум класса.",
+      "image": "https://picsum.photos/seed/fac-fac-2/800/600",
+      "categories": [
+        "clothing",
+        "home"
+      ],
+      "brands": [
+        "SoftTouch",
+        "EcoCotton"
+      ],
+      "country": "Китай",
+      "city": "Ханчжоу",
+      "foundedYear": 2012,
+      "employeesCount": 300,
+      "areaSqm": 8500,
+      "annualTurnover": "$10M - $50M",
+      "mainProducts": [
+        "Постельное белье",
+        "Полотенца",
+        "Халаты"
+      ],
+      "certificates": [
+        "Oeko-Tex Standard 100",
+        "GOTS",
+        "ISO 14001"
+      ],
+      "rating": 4.8,
+      "reviewsCount": 92,
+      "followersCount": 890,
+      "responseRate": 95,
+      "moq": "1000 шт",
+      "leadTime": "20-40 дней",
+      "images_gallery": [
+        "https://picsum.photos/seed/fac-fac-2-1/800/600",
+        "https://picsum.photos/seed/fac-fac-2-2/800/600"
+      ]
+    },
+    {
+      "id": "fac-3",
+      "supplierId": "sup-1",
+      "name": "PowerGrade Batteries",
+      "description": "Высокотехнологичный завод по производству литий-ионных аккумуляторов и зарядных устройств. Автоматизированные линии контроля качества.",
+      "image": "https://picsum.photos/seed/fac-fac-3/800/600",
+      "categories": [
+        "electronics"
+      ],
+      "brands": [
+        "PowerUp",
+        "ChargeIt"
+      ],
+      "country": "Китай",
+      "city": "Дунгуань",
+      "foundedYear": 2015,
+      "employeesCount": 450,
+      "areaSqm": 15000,
+      "annualTurnover": "$20M - $50M",
+      "mainProducts": [
+        "Power Bank",
+        "Зарядные устройства",
+        "Кабели"
+      ],
+      "certificates": [
+        "UL",
+        "CE",
+        "PSE",
+        "KC",
+        "ISO 9001"
+      ],
+      "rating": 4.7,
+      "reviewsCount": 56,
+      "followersCount": 650,
+      "responseRate": 96,
+      "moq": "1000 шт",
+      "leadTime": "15-20 дней"
+    },
+    {
+      "id": "fac-4",
+      "supplierId": "sup-3",
+      "name": "Vietnam Woodworks",
+      "description": "Экологичная мебель из массива дерева. Ручная работа в сочетании с передовыми технологиями обработки древесины.",
+      "image": "https://picsum.photos/seed/fac-fac-4/800/600",
+      "categories": [
+        "home"
+      ],
+      "brands": [
+        "NaturalWood",
+        "ForestLine"
+      ],
+      "country": "Вьетнам",
+      "city": "Биньзыонг",
+      "foundedYear": 2008,
+      "employeesCount": 200,
+      "areaSqm": 6000,
+      "annualTurnover": "$5M - $20M",
+      "mainProducts": [
+        "Столы",
+        "Стулья",
+        "Полки"
+      ],
+      "certificates": [
+        "FSC",
+        "BSCI"
+      ],
+      "rating": 4.9,
+      "reviewsCount": 112,
+      "followersCount": 980,
+      "responseRate": 92,
+      "moq": "50 шт",
+      "leadTime": "45-60 дней"
+    },
+    {
+      "id": "fac-5",
+      "supplierId": "sup-4",
+      "name": "Happy Toys Plant",
+      "description": "Фабрика безопасных и развивающих игрушек. Используем только сертифицированные материалы (ABS пластик, натуральное дерево, краски на водной основе).",
+      "image": "https://picsum.photos/seed/fac-fac-5/800/600",
+      "categories": [
+        "kids"
+      ],
+      "brands": [
+        "SmartKids",
+        "PlayTime"
+      ],
+      "country": "Китай",
+      "city": "Нинбо",
+      "foundedYear": 2018,
+      "employeesCount": 120,
+      "areaSqm": 4000,
+      "annualTurnover": "$2M - $10M",
+      "mainProducts": [
+        "Конструкторы",
+        "Бизиборды",
+        "Куклы"
+      ],
+      "certificates": [
+        "EN71",
+        "ASTM F963",
+        "ISO 9001"
+      ],
+      "rating": 4.8,
+      "reviewsCount": 45,
+      "followersCount": 320,
+      "responseRate": 97,
+      "moq": "200 шт",
+      "leadTime": "20-30 дней"
     }
   ],
   "products": [
     {
       "id": 101,
-      "category": "Электроника и гаджеты",
-      "name": "Беспроводные наушники SoundPro X1",
-      "price": 1250,
+      "factoryId": "fac-legacy",
+      "category": "electronics",
+      "name": "Товар #101 (Classic)",
+      "price": 1500,
+      "description": "Оригинальный товар из предыдущей коллекции.",
       "images": [
         "/images/products/101.webp",
         "/images/products/101_2.webp",
         "/images/products/101_3.webp"
       ],
-      "description": "Премиальные беспроводные наушники с активным шумоподавлением и поддержкой кодеков высокого разрешения. Идеальный выбор для оптовой закупки под реализацию на маркетплейсах. Поставляются в презентабельной упаковке.",
-      "specs": [
+      "specs": [],
+      "tieredPricing": [
         {
-          "name": "Bluetooth",
-          "value": "5.3"
+          "minQty": 10,
+          "maxQty": 50,
+          "price": 1400
         },
         {
-          "name": "Время работы",
-          "value": "до 30 ч"
+          "minQty": 51,
+          "maxQty": 100,
+          "price": 1300
         },
         {
-          "name": "Шумоподавление",
-          "value": "ANC 42dB"
-        },
-        {
-          "name": "Влагозащита",
-          "value": "IPX5"
+          "minQty": 101,
+          "maxQty": 1000,
+          "price": 1200
         }
-      ],
-      "tags": [
-        "popular"
       ]
     },
     {
       "id": 102,
-      "category": "Электроника и гаджеты",
-      "name": "Смарт-часы ActiveLife 7",
-      "price": 2300,
+      "factoryId": "fac-legacy",
+      "category": "electronics",
+      "name": "Товар #102 (Classic)",
+      "price": 2500,
+      "description": "Оригинальный товар из предыдущей коллекции.",
       "images": [
         "/images/products/102.webp",
         "/images/products/102_2.webp"
       ],
-      "description": "Многофункциональные смарт-часы с безрамочным экраном 1.9 дюйма. Измерение пульса, кислорода в крови, давления. Более 100 спортивных режимов. Русская локализация из коробки.",
-      "specs": [
+      "specs": [],
+      "tieredPricing": [
         {
-          "name": "Экран",
-          "value": "1.9\" IPS"
+          "minQty": 10,
+          "maxQty": 50,
+          "price": 2400
         },
         {
-          "name": "Корпус",
-          "value": "Алюминий"
+          "minQty": 51,
+          "maxQty": 100,
+          "price": 2300
         },
         {
-          "name": "Приложение",
-          "value": "WearFit Pro"
+          "minQty": 101,
+          "maxQty": 1000,
+          "price": 2200
         }
-      ],
-      "tags": [
-        "popular"
       ]
     },
     {
       "id": 103,
-      "category": "Товары для дома",
-      "name": "Робот-пылесос CleanMaster 3000",
-      "price": 8500,
+      "factoryId": "fac-legacy",
+      "category": "home",
+      "name": "Коврик для ванной комнаты Milli Mi-2208",
+      "price": 139,
+      "description": "Мягкий и быстросохнущий коврик для ванной комнаты. Противоскользящая основа. Размеры 50х80 см.",
       "images": [
         "/images/products/103.webp",
         "/images/products/103_2.webp"
       ],
-      "description": "Бюджетный робот-пылесос с функцией влажной уборки. Построение карты помещения (гироскоп). Управление со смартфона и через Алису.",
       "specs": [
         {
-          "name": "Мощность",
-          "value": "2500 Па"
+          "name": "Размер",
+          "value": "50x80 см"
         },
         {
-          "name": "Аккумулятор",
-          "value": "2600 мАч"
+          "name": "Материал",
+          "value": "Микрофибра"
         },
         {
-          "name": "Уборка",
-          "value": "Сухая и влажная"
+          "name": "Основа",
+          "value": "Латекс"
         }
       ],
-      "tags": [
-        "popular"
-      ]
+      "tieredPricing": [
+        {
+          "minQty": 10,
+          "maxQty": 49,
+          "price": 139
+        },
+        {
+          "minQty": 50,
+          "maxQty": 99,
+          "price": 109
+        },
+        {
+          "minQty": 100,
+          "maxQty": 9999,
+          "price": 99
+        }
+      ],
+      "rating": 4.2,
+      "reviewsCount": 172,
+      "boughtCount": 35,
+      "shipping": {
+        "country": "Китай",
+        "city": "Гуанчжоу",
+        "method": "СДЭК / Почта",
+        "leadTime": "20-25 дней"
+      }
     },
     {
       "id": 104,
-      "category": "Автотовары",
-      "name": "Автомобильный компрессор TurboPump",
-      "price": 950,
+      "factoryId": "fac-legacy",
+      "category": "home",
+      "name": "Товар #104 (Classic)",
+      "price": 4500,
+      "description": "Оригинальный товар из предыдущей коллекции.",
       "images": [
         "/images/products/104.webp",
         "/images/products/104_2.webp",
         "/images/products/104_3.webp"
       ],
-      "description": "Компактный металлический поршневой компрессор. Накачивает колесо R16 за 3 минуты. В комплекте сумка и набор насадок.",
-      "specs": [
-        {
-          "name": "Производительность",
-          "value": "35 л/мин"
-        },
-        {
-          "name": "Питание",
-          "value": "12В (прикуриватель)"
-        },
-        {
-          "name": "Манометр",
-          "value": "Аналоговый"
-        }
-      ],
-      "tags": [
-        "popular"
-      ]
+      "specs": []
     },
     {
-      "id": 201,
-      "category": "Детские товары",
-      "name": "Конструктор 'Космическая станция'",
-      "price": 1800,
+      "id": 105,
+      "factoryId": "fac-legacy",
+      "category": "sport",
+      "name": "Товар #105 (Classic)",
+      "price": 5500,
+      "description": "Оригинальный товар из предыдущей коллекции.",
       "images": [
-        "/images/products/105_2.webp",
-        "/images/products/105.webp"
+        "/images/products/105.webp",
+        "/images/products/105_2.webp"
       ],
-      "timeLeft": "25 шт.",
-      "description": "Большой набор на 800+ деталей. Совместим с известными брендами. Качественный ABS пластик без запаха.",
-      "specs": [
-        {
-          "name": "Деталей",
-          "value": "842 шт."
-        },
-        {
-          "name": "Возраст",
-          "value": "6+"
-        }
-      ],
-      "tags": [
-        "last_chance"
-      ]
+      "specs": []
     },
     {
-      "id": 202,
-      "category": "Спорт и отдых",
-      "name": "Набор фитнес-резинок (5 шт)",
-      "price": 250,
+      "id": 106,
+      "factoryId": "fac-legacy",
+      "category": "clothing",
+      "name": "Товар #106 (Classic)",
+      "price": 1200,
+      "description": "Оригинальный товар из предыдущей коллекции.",
       "images": [
         "/images/products/106.webp",
         "/images/products/106_2.webp",
         "/images/products/106_3.webp"
       ],
-      "timeLeft": "120 шт.",
-      "description": "Популярный товар для домашнего фитнеса. 5 уровней нагрузки. Мешочек для хранения в комплекте.",
-      "specs": [
-        {
-          "name": "Материал",
-          "value": "Латекс"
-        },
-        {
-          "name": "Нагрузка",
-          "value": "5-25 кг"
-        }
-      ],
-      "tags": [
-        "last_chance"
-      ]
+      "specs": []
     },
     {
-      "id": 203,
-      "category": "Зоотовары",
-      "name": "Автопоилка для кошек и собак",
-      "price": 1100,
+      "id": 107,
+      "factoryId": "fac-legacy",
+      "category": "kids",
+      "name": "Товар #107 (Classic)",
+      "price": 900,
+      "description": "Оригинальный товар из предыдущей коллекции.",
       "images": [
         "/images/products/107.webp",
         "/images/products/107_2.webp"
       ],
-      "timeLeft": "30 шт.",
-      "description": "Фонтанчик для пить с фильтрацией воды. Бесшумный насос. Объем 2 литра.",
-      "specs": [
-        {
-          "name": "Объем",
-          "value": "2 л"
-        },
-        {
-          "name": "Питание",
-          "value": "USB"
-        }
-      ],
-      "tags": [
-        "last_chance"
-      ]
+      "specs": []
     },
     {
-      "id": 204,
-      "category": "Товары для дома",
-      "name": "Умная LED лента (5 метров)",
-      "price": 450,
+      "id": 108,
+      "factoryId": "fac-legacy",
+      "category": "beauty",
+      "name": "Товар #108 (Classic)",
+      "price": 3000,
+      "description": "Оригинальный товар из предыдущей коллекции.",
       "images": [
         "/images/products/108.webp",
         "/images/products/108_2.webp"
       ],
-      "timeLeft": "15 шт.",
-      "description": "RGB лента с управлением через приложение и пульт. Клеевой слой 3M. Работает от USB.",
+      "specs": []
+    },
+    {
+      "id": 201,
+      "factoryId": "fac-1",
+      "category": "electronics",
+      "name": "Наушники беспроводные SoundPro X1",
+      "price": 1250,
+      "description": "Премиальное качество звука, активное шумоподавление, до 30 часов работы. Bluetooth 5.2.",
+      "images": [
+        "https://picsum.photos/seed/prod-201/800/800",
+        "https://picsum.photos/seed/prod-201-1/800/800"
+      ],
       "specs": [
         {
-          "name": "Длина",
-          "value": "5 м"
+          "name": "Bluetooth",
+          "value": "5.2"
         },
         {
-          "name": "Управление",
-          "value": "Bluetooth + Пульт"
+          "name": "Батарея",
+          "value": "30ч"
+        },
+        {
+          "name": "Шумоподавление",
+          "value": "ANC Pro"
         }
       ],
-      "tags": [
-        "last_chance"
+      "tieredPricing": [
+        {
+          "minQty": 10,
+          "maxQty": 50,
+          "price": 1250
+        },
+        {
+          "minQty": 51,
+          "maxQty": 100,
+          "price": 1150
+        },
+        {
+          "minQty": 101,
+          "maxQty": 1000,
+          "price": 1050
+        }
+      ],
+      "rating": 4.8,
+      "reviewsCount": 89,
+      "boughtCount": 210,
+      "shipping": {
+        "country": "Китай",
+        "city": "Шэньчжэнь",
+        "method": "Авиа",
+        "leadTime": "15-20 дней"
+      }
+    },
+    {
+      "id": 202,
+      "factoryId": "fac-1",
+      "category": "electronics",
+      "name": "Портативная колонка AudioX Mini",
+      "price": 890,
+      "description": "Компактная колонка с мощным басом. Водонепроницаемость IPX7.",
+      "images": [
+        "https://picsum.photos/seed/prod-202/800/800",
+        "https://picsum.photos/seed/prod-202-1/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Мощность",
+          "value": "10 Вт"
+        },
+        {
+          "name": "Защита",
+          "value": "IPX7"
+        }
+      ]
+    },
+    {
+      "id": 203,
+      "factoryId": "fac-2",
+      "category": "home",
+      "name": "Комплект постельного белья EcoCotton Premium",
+      "price": 2100,
+      "description": "100% органический хлопок. Гипоаллергенный, долговечный сатин.",
+      "images": [
+        "https://picsum.photos/seed/prod-203/800/800",
+        "https://picsum.photos/seed/prod-203-1/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Материал",
+          "value": "100% Хлопок"
+        },
+        {
+          "name": "Плотность",
+          "value": "200 TC"
+        }
+      ]
+    },
+    {
+      "id": 204,
+      "factoryId": "fac-3",
+      "category": "electronics",
+      "name": "PowerBank 20000mAh Fast Charge",
+      "price": 1100,
+      "description": "Внешний аккумулятор большой емкости с поддержкой быстрой зарядки QC 3.0 и PD.",
+      "images": [
+        "https://picsum.photos/seed/prod-204/800/800",
+        "https://picsum.photos/seed/prod-204-1/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Емкость",
+          "value": "20000 mAh"
+        },
+        {
+          "name": "Выход",
+          "value": "22.5W"
+        }
+      ]
+    },
+    {
+      "id": 205,
+      "factoryId": "fac-3",
+      "category": "electronics",
+      "name": "Зарядное устройство GaN 65W",
+      "price": 1450,
+      "description": "Компактное сетевое зарядное устройство нового поколения GaN.",
+      "images": [
+        "https://picsum.photos/seed/prod-205/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Мощность",
+          "value": "65W"
+        },
+        {
+          "name": "Порты",
+          "value": "2xUSB-C, 1xUSB-A"
+        }
+      ]
+    },
+    {
+      "id": 206,
+      "factoryId": "fac-4",
+      "category": "home",
+      "name": "Кофейный столик из массива дуба",
+      "price": 5600,
+      "description": "Элегантный столик в скандинавском стиле. Натуральное масло.",
+      "images": [
+        "https://picsum.photos/seed/prod-206/800/800",
+        "https://picsum.photos/seed/prod-206-1/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Материал",
+          "value": "Дуб"
+        },
+        {
+          "name": "Размер",
+          "value": "80x50 см"
+        }
+      ],
+      "tieredPricing": [
+        {
+          "minQty": 5,
+          "maxQty": 10,
+          "price": 5600
+        },
+        {
+          "minQty": 11,
+          "maxQty": 20,
+          "price": 5200
+        },
+        {
+          "minQty": 21,
+          "maxQty": 100,
+          "price": 4800
+        }
+      ]
+    },
+    {
+      "id": 207,
+      "factoryId": "fac-4",
+      "category": "home",
+      "name": "Набор деревянных полок (3 шт)",
+      "price": 1200,
+      "description": "Настенные полки для декора. Скрытое крепление.",
+      "images": [
+        "https://picsum.photos/seed/prod-207/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Материал",
+          "value": "Сосна"
+        },
+        {
+          "name": "Цвет",
+          "value": "Натуральный"
+        }
+      ]
+    },
+    {
+      "id": 208,
+      "factoryId": "fac-5",
+      "category": "kids",
+      "name": "Конструктор SmartCity (500 деталей)",
+      "price": 1800,
+      "description": "Большой набор для строительства города. Совместим с ведущими брендами.",
+      "images": [
+        "https://picsum.photos/seed/prod-208/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Деталей",
+          "value": "500+"
+        },
+        {
+          "name": "Возраст",
+          "value": "6+"
+        }
+      ]
+    },
+    {
+      "id": 209,
+      "factoryId": "fac-5",
+      "category": "kids",
+      "name": "Развивающий бизиборд",
+      "price": 2300,
+      "description": "Деревянная доска с замочками, кнопками и шестеренками для развития моторики.",
+      "images": [
+        "https://picsum.photos/seed/prod-209/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Материал",
+          "value": "Береза"
+        },
+        {
+          "name": "Возраст",
+          "value": "1-3 года"
+        }
+      ]
+    },
+    {
+      "id": 210,
+      "factoryId": "fac-2",
+      "category": "home",
+      "name": "Полотенце махровое Lux (Набор)",
+      "price": 1500,
+      "description": "Набор из 3-х полотенец разного размера. Высокая впитываемость.",
+      "images": [
+        "https://picsum.photos/seed/prod-210/800/800"
+      ],
+      "specs": [
+        {
+          "name": "Плотность",
+          "value": "500 г/м2"
+        },
+        {
+          "name": "Состав",
+          "value": "Хлопок"
+        }
       ]
     }
   ],
   "groupBuys": [
     {
       "id": 1,
-      "productId": 101,
+      "factoryId": "fac-1",
+      "productIds": [
+        201,
+        202
+      ],
+      "title": "Беспроводные наушники Premium (ANC, 30ч)",
+      "description": "Оптовая закупка топовых моделей наушников SoundPro. Активное шумоподавление, премиум звук.",
+      "image": "https://picsum.photos/seed/gb-1/800/600",
       "targetQuantity": 100,
-      "currentQuantity": 91,
+      "maxVolume": 200,
+      "currentQuantity": 85,
       "status": "open",
-      "deadline": "2026-03-11",
-      "price": 1250
+      "deadline": "2026-02-14",
+      "startDate": "2026-02-01",
+      "minDurationWeeks": 2,
+      "autoExtendWeeks": 1,
+      "orgFee": 10,
+      "minAmount": 50000,
+      "viewsCount": 1240,
+      "collectionDate": "2026-02-15",
+      "deliveryDate": "2026-03-05"
     },
     {
       "id": 2,
-      "productId": 102,
-      "targetQuantity": 100,
-      "currentQuantity": 10,
+      "factoryId": "fac-2",
+      "productIds": [
+        203,
+        210
+      ],
+      "title": "Домашний текстиль EcoCotton",
+      "description": "Постельное белье и полотенца из 100% органического хлопка. Премиум качество фабрики SilkWay.",
+      "image": "https://picsum.photos/seed/gb-2/800/600",
+      "targetQuantity": 150,
+      "maxVolume": 300,
+      "currentQuantity": 20,
       "status": "open",
-      "deadline": "2026-03-11",
-      "price": 2300
+      "deadline": "2026-03-01",
+      "startDate": "2026-02-10",
+      "minDurationWeeks": 3,
+      "autoExtendWeeks": 1,
+      "orgFee": 12,
+      "minAmount": 30000,
+      "viewsCount": 450,
+      "collectionDate": "2026-03-02",
+      "deliveryDate": "2026-03-25"
+    },
+    {
+      "id": 3,
+      "factoryId": "fac-3",
+      "productIds": [
+        204,
+        205
+      ],
+      "title": "Power Banks 20000mAh & GaN Chargers",
+      "description": "Мощные внешние аккумуляторы и зарядные устройства нового поколения.",
+      "image": "https://picsum.photos/seed/gb-3/800/600",
+      "targetQuantity": 500,
+      "maxVolume": 1000,
+      "currentQuantity": 420,
+      "status": "open",
+      "deadline": "2026-02-15",
+      "startDate": "2026-01-20",
+      "minDurationWeeks": 4,
+      "autoExtendWeeks": 1,
+      "orgFee": 8,
+      "minAmount": 100000,
+      "viewsCount": 2890,
+      "collectionDate": "2026-02-16",
+      "deliveryDate": "2026-03-10"
+    },
+    {
+      "id": 4,
+      "factoryId": "fac-5",
+      "productIds": [
+        208,
+        209
+      ],
+      "title": "Развивающие игрушки SmartKids",
+      "description": "Конструкторы и бизиборды для раннего развития. Безопасные материалы. Хит сезона.",
+      "image": "https://picsum.photos/seed/gb-4/800/600",
+      "targetQuantity": 50,
+      "maxVolume": 100,
+      "currentQuantity": 5,
+      "status": "open",
+      "deadline": "2026-03-10",
+      "startDate": "2026-02-12",
+      "minDurationWeeks": 4,
+      "autoExtendWeeks": 1
+    },
+    {
+      "id": 5,
+      "factoryId": "fac-legacy",
+      "productIds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108
+      ],
+      "title": "Сборная закупка Original",
+      "description": "Широкий ассортимент товаров для дома и электроники по специальным ценам.",
+      "image": "/images/category/1.webp",
+      "targetQuantity": 50,
+      "maxVolume": 100,
+      "currentQuantity": 12,
+      "status": "open",
+      "deadline": "2026-04-01",
+      "startDate": "2026-02-01",
+      "minDurationWeeks": 8,
+      "autoExtendWeeks": 1
+    },
+    {
+      "id": 6,
+      "factoryId": "fac-4",
+      "productIds": [
+        206,
+        207
+      ],
+      "title": "Мебель в скандинавском стиле",
+      "description": "Столики и полки из натурального дуба и сосны. Ручная работа.",
+      "image": "https://picsum.photos/seed/gb-6/800/600",
+      "targetQuantity": 30,
+      "maxVolume": 60,
+      "currentQuantity": 5,
+      "status": "open",
+      "deadline": "2026-03-20",
+      "startDate": "2026-02-12",
+      "minDurationWeeks": 4,
+      "autoExtendWeeks": 1
     }
   ],
   "orders": [
     {
-      "id": "ord-1770624582199",
+      "id": 1001,
       "groupBuyId": 1,
-      "userId": "u1",
-      "quantity": 11,
-      "total": 13750,
-      "date": "2026-02-09T08:09:42.199Z",
-      "status": "active"
+      "userId": "user-1",
+      "items": [
+        {
+          "productId": 201,
+          "quantity": 10
+        },
+        {
+          "productId": 202,
+          "quantity": 5
+        }
+      ],
+      "total": 16950,
+      "date": "2026-02-05",
+      "status": "paid"
     },
     {
-      "id": "ord-1770627815609",
-      "groupBuyId": 1,
-      "userId": "u1",
-      "quantity": 79,
-      "total": 98750,
-      "date": "2026-02-09T09:03:35.609Z",
-      "status": "active"
+      "id": 1002,
+      "groupBuyId": 3,
+      "userId": "user-1",
+      "items": [
+        {
+          "productId": 205,
+          "quantity": 20
+        }
+      ],
+      "total": 29000,
+      "date": "2026-02-08",
+      "status": "awaiting_payment"
+    }
+  ],
+  "banners": [
+    {
+      "id": 1,
+      "title": "Хиты электроники",
+      "subtitle": "Лучшие цены на наушники и колонки",
+      "buttonText": "К закупке",
+      "image": "/images/category/1.webp",
+      "bgColor": "#4C47DD",
+      "link": "/group-buy/1"
     },
     {
-      "id": "ord-1770627827276",
-      "groupBuyId": 1,
-      "userId": "u1",
-      "quantity": 1,
-      "total": 1250,
-      "date": "2026-02-09T09:03:47.276Z",
-      "status": "active"
+      "id": 2,
+      "title": "Уютный дом",
+      "subtitle": "Текстиль премиум класса",
+      "buttonText": "Смотреть",
+      "image": "/images/category/2.webp",
+      "bgColor": "#4C47DD",
+      "link": "/group-buy/2"
     },
     {
-      "id": "ord-1770628105809",
-      "groupBuyId": 2,
-      "userId": "u1",
-      "quantity": 10,
-      "total": 23000,
-      "date": "2026-02-09T09:08:25.809Z",
-      "status": "active"
+      "id": 3,
+      "title": "Power для бизнеса",
+      "subtitle": "Аксессуары оптом",
+      "buttonText": "Заказать",
+      "image": "/images/category/3.webp",
+      "bgColor": "#4C47DD",
+      "link": "/group-buy/3"
     }
   ]
 }

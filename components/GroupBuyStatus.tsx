@@ -39,6 +39,7 @@ export default function GroupBuyStatus({ participants, target, timeLeft, progres
         ></div>
       </div>
 
+      {onAction && (
       <button 
         onClick={onAction}
         className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -46,6 +47,7 @@ export default function GroupBuyStatus({ participants, target, timeLeft, progres
         <Users className="w-5 h-5" />
         {isStarted ? "Присоединиться к складчине" : "Создать складчину"}
       </button>
+      )}
 
       {isStarted ? (
           <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">

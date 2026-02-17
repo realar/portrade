@@ -140,7 +140,7 @@ export default function GroupBuyModal({
           <div className="mt-8 bg-gray-50 rounded-xl p-4 flex items-center justify-between">
              <span className="text-gray-600">Итого к оплате:</span>
              <span className="text-lg font-bold text-gray-900">
-               {(quantity * price).toLocaleString('ru-RU')} ₽
+               {(quantity * price).toLocaleString('ru-RU')} <span className="font-sans">₽</span>
              </span>
           </div>
           

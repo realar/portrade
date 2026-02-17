@@ -5,6 +5,7 @@ import { Product } from '@/context/MockDataContext';
 
 interface EnrichedProduct extends Product {
     groupBuy?: {
+        id: number;
         participants: number;
         target: number;
         timeLeft: string;
@@ -12,48 +13,42 @@ interface EnrichedProduct extends Product {
     }
 }
 
-// Disable caching to show real-time group buy updates
 export const dynamic = 'force-dynamic';
 
 export default async function LastChancePage() {
   const catalog = await readCatalog();
-  
-  // Helper: Check if group buy is in last 10% (by quantity remaining)
-  const isLastChance = (gb: { currentQuantity: number; targetQuantity: number }): boolean => {
-      const remaining = gb.targetQuantity - gb.currentQuantity;
-      const percentRemaining = remaining / gb.targetQuantity;
-      return percentRemaining < 0.1 && percentRemaining > 0;
-  };
 
-  // Combine product data with group buy info for display
-  const enrichProducts = (products: Product[]): EnrichedProduct[] => {
-      return products.map(p => {
-          const gb = catalog.groupBuys.find((g) => g.productId === p.id && g.status === 'open');
-          if (gb) {
-              const remaining = gb.targetQuantity - gb.currentQuantity;
-              return {
-                  ...p,
-                  timeLeft: remaining > 0 ? `${remaining} шт` : undefined,
-                  isLastChance: isLastChance(gb),
-                  groupBuy: {
-                      participants: Math.floor(gb.currentQuantity / 10 + 50),
-                      target: gb.targetQuantity,
-                      timeLeft: gb.deadline,
-                      progress: Math.min(Math.round((gb.currentQuantity / gb.targetQuantity) * 100), 100)
-                  }
-              };
+  const enrichProducts = (productList: Product[]): EnrichedProduct[] => {
+    return productList.map(p => {
+      const gb = catalog.groupBuys.find(g => g.productIds.includes(p.id) && g.status === 'open');
+      if (gb) {
+        const remaining = gb.targetQuantity - gb.currentQuantity;
+        const progress = Math.round((gb.currentQuantity / gb.targetQuantity) * 100);
+        return {
+          ...p,
+          timeLeft: remaining > 0 ? `${remaining} шт` : undefined,
+          isLastChance: progress >= 80,
+          groupBuy: {
+            id: gb.id,
+            participants: Math.floor(gb.currentQuantity / 10 + 50),
+            target: gb.targetQuantity,
+            timeLeft: gb.deadline,
+            progress
           }
-          return { ...p, timeLeft: undefined, isLastChance: false };
-      });
+        };
+      }
+      return { ...p, timeLeft: undefined, isLastChance: false };
+    });
   };
 
-  // Auto-detect last chance products
-  const lastChanceRaw = catalog.products.filter((p) => {
-      const gb = catalog.groupBuys.find((g) => g.productId === p.id && g.status === 'open');
-      return gb && isLastChance(gb);
-  });
-
-  const lastChanceProducts = enrichProducts(lastChanceRaw);
+  // Last chance = products in group buys that are >= 80% full
+  const lastChanceProducts = enrichProducts(
+    catalog.products.filter(p => {
+      const gb = catalog.groupBuys.find(g => g.productIds.includes(p.id) && g.status === 'open');
+      if (!gb) return false;
+      return Math.round((gb.currentQuantity / gb.targetQuantity) * 100) >= 80;
+    })
+  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -61,13 +56,20 @@ export default async function LastChancePage() {
       <main className="max-w-[1400px] mx-auto pb-20">
         <div className="px-6 md:px-12 py-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Последний шанс</h1>
-          <p className="text-gray-600">Товары, до завершения сбора которых осталось менее 10%</p>
+          <p className="text-gray-600">Товары из закупок, которые скоро завершатся</p>
         </div>
         
-        <ProductSection 
-          title="" 
-          products={lastChanceProducts} 
-        />
+        {lastChanceProducts.length > 0 ? (
+          <ProductSection 
+            title="" 
+            products={lastChanceProducts}
+            icon="fire"
+          />
+        ) : (
+          <div className="px-6 md:px-12 py-20 text-center">
+            <p className="text-gray-500 text-lg">Нет товаров из завершающихся закупок</p>
+          </div>
+        )}
       </main>
     </div>
   );

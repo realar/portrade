@@ -23,48 +23,118 @@ export interface User {
   orgId?: string;
 }
 
-export interface Product {
-  id: number;
+export interface Supplier {
+  id: string;
   name: string;
-  category: string;
-  price: number;
-  currency: string;
-  stock: number;
-  factoryId: string;
-  images?: string[];
-  minOrder: number;
-  tags?: string[]; // Added tags for filtering
-  description?: string;
-  specs?: { name: string; value: string }[];
-  minGroupBuyTarget?: number;
+  logo?: string;
+  description: string;
+  rating: number;
+  completedDeals: number;
+  country: string;
+  reviewsCount?: number;
+  followersCount?: number;
+  registrationDate?: string;
+  totalOrders?: number;
+  skuCount?: number;
+  lastSeen?: string;
+  ratingHistory?: { month: string; rating: number }[];
+  ratingBreakdown?: { stars: number; count: number }[];
 }
 
 export interface Factory {
   id: string;
-  name: string;
   supplierId: string;
+  name: string;
+  description: string;
+  image?: string;
+  categories: string[];
+  brands: string[];
+  country?: string;
+  city?: string;
+  foundedYear?: number;
+  employeesCount?: number;
+  areaSqm?: number;
+  annualTurnover?: string;
+  mainProducts?: string[];
+  certificates?: string[];
+  rating?: number;
+  reviewsCount?: number;
+  responseRate?: number;
+  moq?: string;
+  leadTime?: string;
+  images_gallery?: string[];
+  followersCount?: number;
+}
+
+export interface Product {
+  id: number;
+  factoryId: string;
+  name: string;
+  category: string;
+  price: number;
+  currency?: string;
+  stock?: number;
+  images?: string[];
+  minOrder?: number;
+  tags?: string[];
+  description?: string;
+  specs?: { name: string; value: string }[];
+  tieredPricing?: { minQty: number; maxQty: number; price: number }[];
+  rating?: number;
+  reviewsCount?: number;
+  boughtCount?: number;
+  shipping?: {
+    country: string;
+    city: string;
+    method: string;
+    leadTime: string;
+  };
+  minGroupBuyTarget?: number;
 }
 
 export type GroupBuyStatus = 'open' | 'closed' | 'awaiting_payment' | 'paid' | 'shipping' | 'customs' | 'delivered';
 
 export interface GroupBuy {
   id: number;
-  productId: number;
+  factoryId: string;
+  productIds: number[];
   targetQuantity: number;
+  maxVolume: number;
   currentQuantity: number;
   status: GroupBuyStatus;
+  startDate: string;
   deadline: string;
-  price: number; // Price might be lower in bulk
+  minDurationWeeks: number;
+  autoExtendWeeks: number;
+  title?: string;
+  image?: string;
+  description?: string;
+  orgFee?: number;
+  minAmount?: number;
+  collectionDate?: string;
+  deliveryDate?: string;
+  viewsCount?: number;
+}
+
+export interface OrderItem {
+  productId: number;
+  quantity: number;
 }
 
 export interface Order {
   id: string;
   groupBuyId: number;
   userId: string;
-  quantity: number;
+  items: OrderItem[];
   total: number;
   date: string;
-  status: 'active' | 'confirmed' | 'delivered'; // Simplified for user view
+  status: 'active' | 'confirmed' | 'delivered';
+}
+
+export interface CartItem {
+  productId: number;
+  groupBuyId: number;
+  quantity: number;
 }
 
 // --- Context ---
@@ -72,14 +142,20 @@ export interface Order {
 interface MockDataContextType {
   user: User | null;
   organization: Organization | null;
+  suppliers: Supplier[];
+  factories: Factory[];
   products: Product[];
   groupBuys: GroupBuy[];
   orders: Order[];
+  cart: CartItem[];
   loading: boolean;
   
   // Actions
   loginAs: (role: UserRole) => void;
-  joinGroupBuy: (groupBuyOrId: number | GroupBuy, quantity: number) => Promise<void>;
+  addToCart: (productId: number, groupBuyId: number, quantity: number) => void;
+  removeFromCart: (productId: number, groupBuyId: number) => void;
+  updateCartQuantity: (productId: number, groupBuyId: number, quantity: number) => void;
+  confirmCartGroupBuy: (groupBuyId: number) => Promise<void>;
   importProducts: (products: Product[]) => void;
   updateGroupBuyStatus: (id: number, status: GroupBuyStatus) => void;
   createGroupBuy: (data: Partial<GroupBuy>) => Promise<GroupBuy>;
@@ -89,26 +165,26 @@ interface MockDataContextType {
 const MockDataContext = createContext<MockDataContextType | undefined>(undefined);
 
 export function MockDataProvider({ children }: { children: ReactNode }) {
-  // Current session state
   const [user, setUser] = useState<User | null>({ id: 'u1', name: 'Иван Петров', role: 'buyer', orgId: 'o1' });
   const [organization, setOrganization] = useState<Organization | null>({ 
     id: 'o1', name: 'ООО "Вектор"', inn: '7700000000', type: 'buyer', balance: 0 
   });
 
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [factories, setFactories] = useState<Factory[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [groupBuys, setGroupBuys] = useState<GroupBuy[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load initial data from server
   useEffect(() => {
     const loadData = async () => {
       try {
-        // dynamic import to avoid server-side issues if this runs in a weird context, 
-        // though strictly 'use client' means this runs in browser. 
-        // We need to call the server action.
         const { readCatalog } = await import('@/app/actions/catalog');
         const data = await readCatalog();
+        setSuppliers(data.suppliers || []);
+        setFactories(data.factories || []);
         setProducts(data.products || []);
         setGroupBuys(data.groupBuys || []);
         setOrders(data.orders || []);
@@ -121,7 +197,6 @@ export function MockDataProvider({ children }: { children: ReactNode }) {
     loadData();
   }, []);
 
-  // Wrap actions in useCallback to ensure referential stability
   const loginAs = useCallback((role: UserRole) => {
     if (role === 'buyer') {
       setUser({ id: 'u1', name: 'Иван Петров', role: 'buyer', orgId: 'o1' });
@@ -135,115 +210,152 @@ export function MockDataProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const joinGroupBuy = useCallback(async (groupBuyOrId: number | GroupBuy, quantity: number) => {
+  // --- Cart Actions ---
+  const addToCart = useCallback((productId: number, groupBuyId: number, quantity: number) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.productId === productId && item.groupBuyId === groupBuyId);
+      if (existing) {
+        return prev.map(item => 
+          item.productId === productId && item.groupBuyId === groupBuyId
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      }
+      return [...prev, { productId, groupBuyId, quantity }];
+    });
+  }, []);
+
+  const removeFromCart = useCallback((productId: number, groupBuyId: number) => {
+    setCart(prev => prev.filter(item => !(item.productId === productId && item.groupBuyId === groupBuyId)));
+  }, []);
+
+  const updateCartQuantity = useCallback((productId: number, groupBuyId: number, quantity: number) => {
+    if (quantity <= 0) {
+      setCart(prev => prev.filter(item => !(item.productId === productId && item.groupBuyId === groupBuyId)));
+      return;
+    }
+    setCart(prev => prev.map(item => 
+      item.productId === productId && item.groupBuyId === groupBuyId
+        ? { ...item, quantity }
+        : item
+    ));
+  }, []);
+
+  const confirmCartGroupBuy = useCallback(async (groupBuyId: number) => {
     if (!user) return;
     
-    let gb: GroupBuy | undefined;
-    if (typeof groupBuyOrId === 'number') {
-        gb = groupBuys.find(g => g.id === groupBuyOrId);
-    } else {
-        gb = groupBuyOrId;
-    }
+    const cartItems = cart.filter(item => item.groupBuyId === groupBuyId);
+    if (cartItems.length === 0) return;
 
+    const gb = groupBuys.find(g => g.id === groupBuyId);
     if (!gb) return;
 
-    const groupBuyId = gb.id;
+    const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const orderItems: OrderItem[] = cartItems.map(item => ({
+      productId: item.productId,
+      quantity: item.quantity
+    }));
 
-    const newQuantity = gb.currentQuantity + quantity;
-    const isComplete = newQuantity >= gb.targetQuantity;
-    
-    // Prepare updated GB
-    const updatedGb: GroupBuy = { 
-        ...gb, 
-        currentQuantity: newQuantity,
-        status: isComplete ? 'closed' : gb.status // Or 'awaiting_payment'
-    };
+    const totalPrice = cartItems.reduce((sum, item) => {
+      const product = products.find(p => p.id === item.productId);
+      return sum + (product ? product.price * item.quantity : 0);
+    }, 0);
 
-    // Optimistic update
     const newOrder: Order = {
-        id: `ord-${Date.now()}`,
-        groupBuyId,
-        userId: user.id,
-        quantity,
-        total: quantity * gb.price,
-        date: new Date().toISOString(),
-        status: 'active'
+      id: `ord-${Date.now()}`,
+      groupBuyId,
+      userId: user.id,
+      items: orderItems,
+      total: totalPrice,
+      date: new Date().toISOString(),
+      status: 'active'
     };
-    
-    
+
+    const newQuantity = gb.currentQuantity + totalQuantity;
+    const isComplete = newQuantity >= gb.maxVolume;
+    const updatedGb: GroupBuy = {
+      ...gb,
+      currentQuantity: newQuantity,
+      status: isComplete ? 'closed' : gb.status
+    };
+
+    // Optimistic updates
     setOrders(prev => [newOrder, ...prev]);
     setGroupBuys(prev => prev.map(g => g.id === groupBuyId ? updatedGb : g));
+    setCart(prev => prev.filter(item => item.groupBuyId !== groupBuyId));
 
-    // Server update
+    // Server sync
     try {
-        const { createOrder, updateGroupBuyAction } = await import('@/app/actions/catalog');
-        
-        await Promise.all([
-            createOrder(newOrder),
-            updateGroupBuyAction(updatedGb)
-        ]);
-        
+      const { createOrder, updateGroupBuyAction } = await import('@/app/actions/catalog');
+      await Promise.all([
+        createOrder(newOrder),
+        updateGroupBuyAction(updatedGb)
+      ]);
     } catch (err) {
-        console.error("Failed to sync group buy/order:", err);
+      console.error("Failed to sync order:", err);
     }
-  }, [user, groupBuys]);
+  }, [user, cart, groupBuys, products]);
 
   const importProducts = useCallback((newProducts: Product[]) => {
     setProducts(prev => [...prev, ...newProducts]);
-    // TODO: persist imported products
   }, []);
 
   const updateGroupBuyStatus = useCallback(async (id: number, status: GroupBuyStatus) => {
-    // Optimistic
     setGroupBuys(prev => prev.map(gb => gb.id === id ? { ...gb, status } : gb));
-    
-    // Server
     try {
-        const { updateGroupBuyStatusAction } = await import('@/app/actions/catalog');
-        await updateGroupBuyStatusAction(id, status);
+      const { updateGroupBuyStatusAction } = await import('@/app/actions/catalog');
+      await updateGroupBuyStatusAction(id, status);
     } catch (err) {
-        console.error("Failed to update status:", err);
+      console.error("Failed to update status:", err);
     }
   }, []);
   
   const createGroupBuy = useCallback(async (data: Partial<GroupBuy>) => {
-      const newId = Math.max(...groupBuys.map(g => g.id), 0) + 1;
-      const newGb = {
-          id: newId,
-          productId: data.productId!,
-          targetQuantity: data.targetQuantity || 100,
-          currentQuantity: 0,
-          status: 'open',
-          deadline: data.deadline || '2024-12-31',
-          price: data.price || 0
-      } as GroupBuy;
-      
-      setGroupBuys(prev => [...prev, newGb]);
-      
-      try {
-          const { createGroupBuyAction } = await import('@/app/actions/catalog');
-          await createGroupBuyAction(newGb);
-      } catch (err) {
-          console.error("Failed to create group buy:", err);
-      }
-      return newGb;
+    const newId = Math.max(...groupBuys.map(g => g.id), 0) + 1;
+    const now = new Date();
+    const deadline = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 2 weeks
+    const newGb: GroupBuy = {
+      id: newId,
+      factoryId: data.factoryId || '',
+      productIds: data.productIds || [],
+      targetQuantity: data.targetQuantity || 100,
+      maxVolume: data.maxVolume || 150,
+      currentQuantity: 0,
+      status: 'open',
+      startDate: now.toISOString().split('T')[0],
+      deadline: data.deadline || deadline.toISOString().split('T')[0],
+      minDurationWeeks: 2,
+      autoExtendWeeks: 1
+    };
+    
+    setGroupBuys(prev => [...prev, newGb]);
+    
+    try {
+      const { createGroupBuyAction } = await import('@/app/actions/catalog');
+      await createGroupBuyAction(newGb);
+    } catch (err) {
+      console.error("Failed to create group buy:", err);
+    }
+    return newGb;
   }, [groupBuys]);
 
   const updateProduct = useCallback(async (updatedProduct: Product) => {
-      setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
-      
-      try {
-          const { updateProductAction } = await import('@/app/actions/catalog');
-          await updateProductAction(updatedProduct);
-      } catch (err) {
-          console.error("Failed to update product:", err);
-      }
+    setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+    try {
+      const { updateProductAction } = await import('@/app/actions/catalog');
+      await updateProductAction(updatedProduct);
+    } catch (err) {
+      console.error("Failed to update product:", err);
+    }
   }, []);
 
   const value = useMemo(() => ({
-      user, organization, products, groupBuys, orders, loading,
-      loginAs, joinGroupBuy, importProducts, updateGroupBuyStatus, createGroupBuy, updateProduct
-  }), [user, organization, products, groupBuys, orders, loading, loginAs, joinGroupBuy, importProducts, updateGroupBuyStatus, createGroupBuy, updateProduct]);
+    user, organization, suppliers, factories, products, groupBuys, orders, cart, loading,
+    loginAs, addToCart, removeFromCart, updateCartQuantity, confirmCartGroupBuy,
+    importProducts, updateGroupBuyStatus, createGroupBuy, updateProduct
+  }), [user, organization, suppliers, factories, products, groupBuys, orders, cart, loading,
+    loginAs, addToCart, removeFromCart, updateCartQuantity, confirmCartGroupBuy,
+    importProducts, updateGroupBuyStatus, createGroupBuy, updateProduct]);
 
   return (
     <MockDataContext.Provider value={value}>

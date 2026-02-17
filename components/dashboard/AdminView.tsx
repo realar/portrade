@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function AdminView() {
-  const { groupBuys, products, updateGroupBuyStatus } = useMockData();
+  const { groupBuys, factories, suppliers, updateGroupBuyStatus } = useMockData();
   const router = useRouter();
 
   const statuses: GroupBuyStatus[] = ['open', 'closed', 'awaiting_payment', 'paid', 'shipping', 'customs', 'delivered'];
@@ -29,7 +29,7 @@ export default function AdminView() {
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100">
               <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Лот ID</th>
-              <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Товар</th>
+              <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Фабрика</th>
               <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Прогресс</th>
               <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Текущий статус</th>
               <th className="text-left py-4 px-6 text-sm font-medium text-gray-500">Управление статусом</th>
@@ -37,7 +37,8 @@ export default function AdminView() {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {groupBuys.map((gb) => {
-              const product = products.find(p => p.id === gb.productId);
+              const factory = factories.find(f => f.id === gb.factoryId);
+              const supplier = factory ? suppliers.find(s => s.id === factory.supplierId) : null;
               return (
                 <tr 
                     key={gb.id} 
@@ -46,15 +47,18 @@ export default function AdminView() {
                 >
                   <td className="py-4 px-6 font-medium text-gray-900">#{gb.id}</td>
                   <td className="py-4 px-6 text-gray-600">
-                    {product ? (
-                      <Link 
-                        href={`/product/${product.id}`} 
-                        onClick={(e) => e.stopPropagation()}
-                        className="hover:text-primary-600 transition-colors font-medium"
-                      >
-                        {product.name}
-                      </Link>
-                    ) : 'Unknown Product'}
+                    {factory ? (
+                      <div>
+                        <Link 
+                          href={`/factory/${factory.id}`} 
+                          onClick={(e) => e.stopPropagation()}
+                          className="hover:text-primary-600 transition-colors font-medium"
+                        >
+                          {factory.name}
+                        </Link>
+                        <div className="text-xs text-gray-400">{supplier?.name}</div>
+                      </div>
+                    ) : 'Unknown'}
                   </td>
                   <td className="py-4 px-6 text-gray-600">
                     <div className="flex items-center gap-2 text-xs">
